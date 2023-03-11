@@ -1,0 +1,4 @@
+[include]
+	path = ~/.config_files/.git_config_perso
+
+# add proxy
