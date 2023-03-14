@@ -9,16 +9,16 @@ case $- in
 	*) return ;;
 esac
 
-# source plateform specific value
-if ! [ -f ~/.config_files/host ]; then
-	echo "unknown host"
+# source plateform specific values
+location=`echo ~/.bashrc | xargs realpath | xargs dirname`
+if [ -f $location/host ]; then
+	source $location/host
 else
-	source ~/.config_files/host
+	echo "unknown host"
 fi
 
-# check if on compute node
-if ! [ -z `which squeue` ]; then
-	# squeue aliases & functions
+# squeue aliases & functions
+if ! [ -z `which 2>/dev/null squeue` ]; then
 	alias squeue="squeue -o \"%8i %9P %15j %8u %8T %10M %10l %19R %S\""
 	alias fr="sinfo -t IDLE"
 	alias wh="squeue -u $USER"
@@ -31,19 +31,6 @@ if ! [ -z `which squeue` ]; then
 		if ! [ -z $DEFAULT_TIME ]; then time="--time $DEFAULT_TIME"; fi
 		salloc -N 1 --exclusive $part $time
 	}
-else
-	# scp aliases
-	function myscp {
-		if [ -d $2 ] ; then
-			option=-r
-		fi
-		if [ -f $2 ] ; then
-			option=
-		fi
-		scp -l 1000 $option $2 $1
-	}
-	alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
-	alias sendtonwadmin="myscp sartorir@nwadmin.frec.bull.fr:/home_nfs/sartorir"
 fi
 
 # set proxy if defined
@@ -127,6 +114,15 @@ function dalton {
 	ssh rsartori@dalton
 }
 
+# scp aliases
+function myscp {
+	rec=""
+	if [ -d $2 ] ; then rec="-r"; fi
+	scp -l 1000 $rec $2 $1
+}
+alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
+alias sendtonwadmin="myscp sartorir@nwadmin.frec.bull.fr:/home_nfs/sartorir"
+
 # avoid mistakes
 TRASH=~/.trash
 mkdir -p $TRASH
@@ -206,7 +202,7 @@ function vgdb {
 }
 
 # less simple functions
-if ! [ -z `which discord` ]; then
+if ! [ -z `which 2>/dev/null discord` ]; then
 	function up-discord {
 		echo "cd ~/Downloads"
 		echo "https://discordapp.com/api/download?platform=linux&format=deb"
@@ -214,7 +210,7 @@ if ! [ -z `which discord` ]; then
 		echo "rm discord*.deb"
 	}
 fi
-if ! [ -z `which rustc` ]; then
+if ! [ -z `which 2>/dev/null rustc` ]; then
 	function rust? {
 		if [[ "$1" =~ "crate" ]]
 		then
@@ -224,7 +220,7 @@ if ! [ -z `which rustc` ]; then
 		fi
 	}
 fi
-if ! [ -z `which batcat` ]; then
+if ! [ -z `which 2>/dev/null batcat` ]; then
 	function mybatcat {
 		wc=`cat 2>/dev/null $@ | wc -l`
 		max=`tput lines`
@@ -285,7 +281,7 @@ function set_PS1 {
 	then git=""; else git="$cyanp($tmp) "; fi
 	tmp=`date +%H:%M:%S`
 	hour="$purplep$tmp "
-	if [ $USER == root ]
+	if [ `whoami` == root ]
 	then tmp="root:"; else tmp="$"; fi
 	prompt="$bluep$tmp$whitep "
 	PS1="$host$pwd$git$hour$prompt"
