@@ -21,3 +21,6 @@ To set environment variables I use at home (require the .bashrc to be set to wor
 ```bash
 ln -s ~/.config_files/hosts/home ~/.config_files/host
 ```
+
+TODO: .emacs
+TODO: .ssh/config
