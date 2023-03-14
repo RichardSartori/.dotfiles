@@ -1,0 +1,11 @@
+WORKDIR=/home/richard/Documents/Professional/INRIA-ATOS-BULL/These-gitlab/llvm_pass
+PERSODIR=/home/richard/Documents/MyProjects/RUST
+UNITYDIR=/home/richard/Documents/MyProjects/UNITY/godWork
+alias cdu="cd $UNITYDIR"
+LIB_DIR=/home/richard/Documents/Libraries
+export HWLOC_HOME=${LIB_DIR}/hwloc-2.4.1/install
+export LLVM_HOME=${LIB_DIR}/llvm-15/install
+export MPI_HOME=${LIB_DIR}/openmpi-4.1.4/install
+export GO_HOME=${LIB_DIR}/go-1.17.3
+export GOPATH=/home/richard/Documents/MyProjects/GO
+export CARGO_HOME=${LIB_DIR}/rust/cargo

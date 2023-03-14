@@ -3,13 +3,12 @@ Configuration files used in my terminal
 
 # usage
 I usually clone this repo in my home and use symbolic links that point to this repo.
-Most of them require the .bashrc to be set to work properly
 
 | Filename    | usual location/name  |
 | ----------- | -------------------- |
-| bashrc.sh   | ~/.bashrc            |
-| gitconfig/* | ~/.git_config        |
+| bashrc      | ~/.bashrc            |
 | hosts/*     | ~/.config_files/host |
+| gitconfig/* | ~/.git_config        |
 | gdbinit.py  | ~/.gdbinit           |
 
 # examples
@@ -18,7 +17,7 @@ To use my .bashrc
 ln -s ~/.config_files/bashrc ~/.bashrc
 ```
 
-To set environment variables I use at home
+To set environment variables I use at home (require the .bashrc to be set to work properly)
 ```bash
 ln -s ~/.config_files/hosts/home ~/.config_files/host
 ```
