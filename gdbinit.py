@@ -2292,7 +2292,7 @@ end
 
 # Better GDB defaults ----------------------------------------------------------
 
-# set history save
+set history save
 set verbose off
 set print pretty on
 set print array off
