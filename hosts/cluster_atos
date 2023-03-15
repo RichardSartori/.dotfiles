@@ -8,7 +8,7 @@ case $HOSTNAME in
 	pise*)
 		PROXY=http://129.183.4.13:8080
 		WORKDIR=/home_nfs/sartorir/THESE
-		DEFAULT_PART="rome7402_NPS4 -x pise[18-20]"
+		DEFAULT_PART="rome7402" # -x pise[18-20]
 		DEFAULT_TIME="12:00:00"
 		export HWLOC_HOME="/usr/lib64"
 		export LLVM_HOME=~/LIBS/llvm-15/install
