@@ -48,9 +48,16 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # frequently used directories
-alias cdw="cd $WORKDIR"
-alias cdp="cd $PERSODIR"
-cd $PERSODIR
+STARTDIR=~
+if ! [ -z $WORKDIR ]; then
+	alias cdw="cd $WORKDIR"
+	STARTDIR=$WORKDIR
+fi
+if ! [ -z $PERSODIR ]; then
+	STARTDIR=$PERSODIR
+	alias cdp="cd $PERSODIR"
+fi
+cd $STARTDIR
 
 # completion features
 if ! shopt -oq posix; then
