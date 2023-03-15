@@ -26,15 +26,15 @@ if ! [ -z `which 2>/dev/null squeue` ]; then
 	function mods { module avail 2>&1 | grep -i "$@" 2>/dev/null;}
 	function req {
 		part=""
-		if ! [ -z $DEFAULT_PART ]; then part="-p $DEFAULT_PART"; fi
+		if ! [ -z "$DEFAULT_PART" ]; then part="-p $DEFAULT_PART"; fi
 		time=""
-		if ! [ -z $DEFAULT_TIME ]; then time="--time $DEFAULT_TIME"; fi
+		if ! [ -z "$DEFAULT_TIME" ]; then time="--time $DEFAULT_TIME"; fi
 		salloc -N 1 --exclusive $part $time
 	}
 fi
 
 # set proxy if defined
-if ! [ -z $PROXY ]; then
+if ! [ -z "$PROXY" ]; then
 	export http_proxy=$PROXY
 	export https_proxy=`echo $PROXY | sed "s/http/https/g"`
 fi
@@ -49,11 +49,11 @@ shopt -s checkwinsize
 
 # frequently used directories
 STARTDIR=~
-if ! [ -z $WORKDIR ]; then
+if ! [ -z "$WORKDIR" ]; then
 	alias cdw="cd $WORKDIR"
 	STARTDIR=$WORKDIR
 fi
-if ! [ -z $PERSODIR ]; then
+if ! [ -z "$PERSODIR" ]; then
 	STARTDIR=$PERSODIR
 	alias cdp="cd $PERSODIR"
 fi
