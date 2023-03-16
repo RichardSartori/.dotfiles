@@ -2,6 +2,7 @@ WORKDIR=/home/richard/Documents/Professional/INRIA-ATOS-BULL/These-gitlab/llvm_p
 PERSODIR=/home/richard/Documents/MyProjects/RUST
 UNITYDIR=/home/richard/Documents/MyProjects/UNITY/godWork
 alias cdu="cd $UNITYDIR"
+alias cdd="cd ~/Downloads"
 export LIB_DIR=/home/richard/Documents/Libraries
 export HWLOC_HOME=${LIB_DIR}/hwloc-2.4.1/install
 export LLVM_HOME=${LIB_DIR}/llvm-15/install
