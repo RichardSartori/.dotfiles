@@ -1,3 +1,5 @@
-[alias]
-	what = log --oneline -n 10
-	hsup = pull
+[include]
+	path = ~/.config_files/gitconfig/common
+[user]
+	name = Richard SARTORI
+	email = richard.sartori223@orange.fr
