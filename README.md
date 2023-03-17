@@ -8,7 +8,7 @@ I usually clone this repo in my home and use symbolic links that point to this r
 | ---------------- | --------------------------- |
 | bashrc/bashrc.sh | ~/.bashrc                   |
 | bashrc/hosts/*   | ~/.config_files/bashrc/host |
-| gitconfig/*      | ~/.gitconfig               |
+| gitconfig/*      | ~/.gitconfig                |
 | misc/gdbinit.py  | ~/.gdbinit                  |
 | emacs/config.el  | ~/.emacs                    |
 
@@ -20,7 +20,7 @@ ln -s ~/.config_files/bashrc/bashrc.sh ~/.bashrc
 
 To set environment variables I use at home (require the .bashrc to be set to work properly)
 ```bash
-ln -s ~/.config_files/bashrc/hosts/home ~/.config_files/bashrc/host
+ln -s ~/.config_files/bashrc/hosts/home.sh ~/.config_files/bashrc/host
 ```
 
 To use my emacs configuration
