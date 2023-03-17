@@ -46,8 +46,8 @@
 ;; whitespace mode everywhere
 (global-whitespace-mode)
 
-;; location of custom themes
-(add-to-list 'custom-theme-load-path "~/.config_files/emacs/")
+;; location of custom themes (in the same directory as this file)
+(add-to-list 'custom-theme-load-path (file-name-directory (file-truename load-file-name)))
 
 ;; sublime-text looking theme
 (load-theme 'monokai t)
@@ -59,3 +59,9 @@
 ;; auto-complete
 (ido-mode 1)
 (global-set-key (kbd "M-x") 'smex)
+
+;; update packages :
+;; `M-x list-packages`
+;; `C-s installed` and find installed packages
+;; type u on the left of the package you want to upgrade
+;; type x to apply upgrades
