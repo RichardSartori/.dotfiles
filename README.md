@@ -7,14 +7,14 @@ Most configuration files will work everywhere, however some require platform-spe
 In this situation, they will load a 'host' file in the same directory, that can also be a symbolic link to file in the 'hosts' directory.
 In the following, replace $WHERE with where you cloned the repo (usually ~).
 
-| Filename                          | usual location/name    |
-| --------------------------------- | ---------------------- |
-| $WHERE/bashrc/config.sh           | ~/.bashrc              |
-| $WHERE/bashrc/hosts/*             | $WHERE/bashrc/host     |
-| $WHERE/gitconfig/config.gitconfig | ~/.gitconfig           |
-| $WHERE/gitconfig/hosts/*          | $WHERE//gitconfig/host |
-| $WHERE/emacs/config.el            | ~/.emacs               |
-| $WHERE/misc/gdbinit.py            | ~/.gdbinit             |
+| Filename                          | usual location/name   |
+| --------------------------------- | --------------------- |
+| $WHERE/bashrc/config.sh           | ~/.bashrc             |
+| $WHERE/bashrc/hosts/*             | $WHERE/bashrc/host    |
+| $WHERE/gitconfig/config.gitconfig | ~/.gitconfig          |
+| $WHERE/gitconfig/hosts/*          | $WHERE/gitconfig/host |
+| $WHERE/emacs/config.el            | ~/.emacs              |
+| $WHERE/misc/gdbinit.py            | ~/.gdbinit            |
 
 # examples
 To use the .bashrc
