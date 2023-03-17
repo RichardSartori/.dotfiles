@@ -10,6 +10,7 @@ I usually clone this repo in my home and use symbolic links that point to this r
 | bashrc/hosts/*   | ~/.config_files/bashrc/host |
 | gitconfig/*      | ~/.git_config               |
 | misc/gdbinit.py  | ~/.gdbinit                  |
+| emacs/config.el  | ~/.emacs                    |
 
 # examples
 To use my .bashrc
@@ -22,7 +23,11 @@ To set environment variables I use at home (require the .bashrc to be set to wor
 ln -s ~/.config_files/bashrc/hosts/home ~/.config_files/bashrc/host
 ```
 
+To use my emacs configuration
+```bash
+ln -s ~/.config_files/emacs/config.el ~/.emacs
+```
+
 # TODOs
   1. complete gitconfig files
-  2. .emacs
-  3. .ssh/config
+  2. .ssh/config

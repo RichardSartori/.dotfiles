@@ -1,3 +1,20 @@
+;; initialize packages
+(package-initialize)
+
+;; MELPA
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+;; no startup screen
+(setq inhibit-startup-screen t)
+
+;; set side bars
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
+
+;; show matching parenthesis
+(show-paren-mode 1)
+
 ;; tab with
 (setq-default tab-width 4)
 
@@ -35,8 +52,10 @@
 ;; sublime-text looking theme
 (load-theme 'monokai t)
 
-;; MELPA
-;;(require 'package)
-;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;;(package-initialize)
-;;(package-refresh-contents)
+;; location of auto-saves
+(setq backup-directory-alist '(("." . "~/.trash")))
+(setq backup-by-copying t)
+
+;; auto-complete
+(ido-mode 1)
+(global-set-key (kbd "M-x") 'smex)
