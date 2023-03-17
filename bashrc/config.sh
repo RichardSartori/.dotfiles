@@ -161,7 +161,7 @@ function myls {
 		\ls $options $dirs
 	fi
 }
-alias ls="myls --color=auto --group-directories-first"
+alias ls="myls --color=auto --group-directories-first -v"
 alias ll="ls -ahl"
 alias l.="ls -d .*"
 
