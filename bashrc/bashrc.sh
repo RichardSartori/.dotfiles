@@ -231,13 +231,9 @@ if ! [ -z `which 2>/dev/null batcat` ]; then
 	function mybatcat {
 		wc=`cat 2>/dev/null $@ | wc -l`
 		max=`tput lines`
-		if [ $wc -ge $max ]
-		then
-			options="+Gg -M"
-		else
-			options="-F"
-		fi
-		batcat --style=header,grid,numbers --paging=always --pager="less -R $options" $@
+		options=""
+		if [ $wc -eq 0 ] || [ $wc -ge $max ]; then options="+Gg"; fi
+		batcat --style=header,grid,numbers --paging=always --pager="less -RMF $options" $@
 	}
 	alias more="mybatcat"
 fi
@@ -264,6 +260,7 @@ alias c="cd -"
 alias ram="ps a -o cmd=COMMAND,pid=ID,stat=STATE,rss=USED,vsz=ALLOCATED --sort=-vsz | grep '\(^/\)\|\(ps a -o\)\|\(grep\)' -v"
 alias hellothere="echo 'General Kenobi!'"
 alias update="sudo -- sh -c 'apt update && apt list --upgradable && apt -y upgrade && apt -y autoremove'" # apt list -a
+alias mpimonitoring="mpiexec --mca pml_monitoring_enable 1 --mca pml_monitoring_filename comms --mca pml_monitoring_enable_output 3"
 
 # colors for PS1
 redp="\[${red}\]"
