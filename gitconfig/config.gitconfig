@@ -1,0 +1,5 @@
+[include]
+	path = ~/.config_files/gitconfig/host
+[alias]
+	what = log --oneline -n 10
+	hsup = pull

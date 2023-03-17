@@ -1,5 +1,3 @@
-[include]
-	path = ~/.config_files/gitconfig/common.gitconfig
 [user]
 	name = Richard SARTORI
 	email = richard.sartori223@orange.fr

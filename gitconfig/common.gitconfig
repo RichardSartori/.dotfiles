@@ -1,3 +1,0 @@
-[alias]
-	what = log --oneline -n 10
-	hsup = pull
