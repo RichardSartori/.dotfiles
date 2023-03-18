@@ -58,16 +58,25 @@
 (setq backup-directory-alist '(("." . "~/.trash")))
 (setq backup-by-copying t)
 
-;; auto-complete
+;; C-x f auto-complete
 (ido-mode 1)
-(global-set-key (kbd "M-x") 'smex)
 
-;; multiple cursors
-(global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
-(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
+;; ============================================ ;;
+;; commands below require non built-in packages ;;
+;; ============================================ ;;
 
 ;; update packages :
 ;; `M-x list-packages`
 ;; `C-s installed` and find installed packages
 ;; type u on the left of the package you want to upgrade
 ;; type x to apply upgrades
+
+;; M-x auto-complete
+(global-set-key (kbd "M-x") 'smex)
+
+;; general auto-complete
+(ac-config-default)
+
+;; multiple cursors
+(global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
+(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
