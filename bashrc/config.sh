@@ -232,7 +232,7 @@ if ! [ -z `which 2>/dev/null batcat` ]; then
 		wc=`cat 2>/dev/null $@ | wc -l`
 		max=`tput lines`
 		options=""
-		if [ $wc -eq 0 ] || [ $wc -ge $max ]; then options="+Gg"; fi
+		if [ $wc -ge $max ]; then options="+Gg"; fi
 		batcat --style=header,grid,numbers --paging=always --pager="less -RMF $options" $@
 	}
 	alias more="mybatcat"
