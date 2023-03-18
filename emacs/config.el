@@ -62,6 +62,10 @@
 (ido-mode 1)
 (global-set-key (kbd "M-x") 'smex)
 
+;; multiple cursors
+(global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
+(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
+
 ;; update packages :
 ;; `M-x list-packages`
 ;; `C-s installed` and find installed packages
