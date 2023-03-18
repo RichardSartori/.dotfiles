@@ -3,3 +3,14 @@
 [alias]
 	what = log --oneline -n 10
 	hsup = pull
+[color]
+	ui = auto
+[color "diff"]
+	meta = white
+	frag = cyan
+	old = red
+	new = green
+[color "status"]
+	added = green
+	changed = yellow
+	untracked = red
