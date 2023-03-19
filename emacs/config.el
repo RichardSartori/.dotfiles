@@ -69,7 +69,7 @@
 ;; update packages :
 ;; `M-x list-packages`
 ;; `C-s installed` and find installed packages
-;; type u on the left of the package you want to upgrade
+;; type U (uppercase u) on the left of the package you want to upgrade
 ;; type x to apply upgrades
 
 ;; M-x auto-complete
