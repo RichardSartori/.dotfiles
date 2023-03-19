@@ -13,6 +13,7 @@
 (scroll-bar-mode 0)
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode)
+(setq column-number-mode t)
 
 ;; show matching parenthesis
 (show-paren-mode 1)
