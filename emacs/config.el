@@ -73,16 +73,22 @@
 ;; type x to apply upgrades
 
 ;; M-x auto-complete
+(require 'smex)
 (global-set-key (kbd "M-x") 'smex)
 
 ;; general auto-complete
+(require 'auto-complete)
 (ac-config-default)
 
 ;; multiple cursors
+(require 'multiple-cursors)
 (global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
 (global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
 
 ;; highlight keywords
-;; install package hl-todo
-;; https://github.com/tarsius/hl-todo
-;; map TODO, TMP, FIXME to #AE81FF
+;;;;(require 'hl-todo)
+;;;;map TODO, TMP, FIXME to #AE81FF
+
+;; syntax highlight for LLVM
+;; source: https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
+(require 'llvm-mode)
