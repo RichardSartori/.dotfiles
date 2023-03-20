@@ -129,6 +129,7 @@ function myscp {
 }
 alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
 alias sendtonwadmin="myscp sartorir@nwadmin.frec.bull.fr:/home_nfs/sartorir"
+alias sendtodalton="myscp rsartori@dalton:/home/rsartori"
 
 # avoid mistakes
 TRASH=~/.trash
@@ -203,6 +204,7 @@ function die { kill -9 `ps a -o pid,cmd --sort=pid | grep -i "$@" | head -n 1 | 
 function up { arg=$1; if [ $# -eq 0 ]; then arg=1; fi; dst="./"; while [ $arg -gt 0 ]; do dst="$dst../"; arg=$((arg-1)); done; cd $dst;}
 function boxcheck { ack --filter --passthru --color-match=red "Overfull|Underfull";}
 function mpidebug { if [ $# -eq 1 ]; then n=1; app=$1; else n=$1; app=$2; fi; mpiexec -np $n xterm -e gdb $app;}
+function svgtopdf { if [ $# -eq 0 ]; then echo "missing input"; else inkscape -D -z --file=$1.svg --export-pdf=$1.pdf; fi;}
 function vgdb {
 	valgrind --vgdb=yes --vgdb-error=0 $1 &
 	echo "gdb $1"; gdb -ex "target remote | vgdb" $1
