@@ -81,3 +81,8 @@
 ;; multiple cursors
 (global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
 (global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
+
+;; highlight keywords
+;; install package hl-todo
+;; https://github.com/tarsius/hl-todo
+;; map TODO, TMP, FIXME to #AE81FF
