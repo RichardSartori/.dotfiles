@@ -53,7 +53,12 @@
 (add-to-list 'load-path              (file-name-directory (file-truename load-file-name)))
 (add-to-list 'custom-theme-load-path (file-name-directory (file-truename load-file-name)))
 
+;; syntax highlighting for LLVM
+;; source: https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
+(require 'llvm-mode)
+
 ;; sublime-text looking theme
+;; source: https://github.com/oneKelvinSmith/monokai-emacs/blob/master/monokai-theme.el
 (load-theme 'monokai t)
 
 ;; location of auto-saves
@@ -93,7 +98,3 @@
 	("FIXME" . "#00FF00")
 	("TMP"   . "#00FF00")))
 (global-hl-todo-mode)
-
-;; syntax highlighting for LLVM
-;; source: https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
-(require 'llvm-mode)
