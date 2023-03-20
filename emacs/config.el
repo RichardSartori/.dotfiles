@@ -49,7 +49,8 @@
 ;; whitespace mode everywhere
 (global-whitespace-mode)
 
-;; location of custom themes (in the same directory as this file)
+;; location of custom scripts (in the same directory as this file)
+(add-to-list 'load-path              (file-name-directory (file-truename load-file-name)))
 (add-to-list 'custom-theme-load-path (file-name-directory (file-truename load-file-name)))
 
 ;; sublime-text looking theme
@@ -86,9 +87,13 @@
 (global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
 
 ;; highlight keywords
-;;;;(require 'hl-todo)
-;;;;map TODO, TMP, FIXME to #AE81FF
+(require 'hl-todo)
+(setq hl-todo-keyword-faces '(
+	("TODO"  . "#00FF00")
+	("FIXME" . "#00FF00")
+	("TMP"   . "#00FF00")))
+(global-hl-todo-mode)
 
-;; syntax highlight for LLVM
+;; syntax highlighting for LLVM
 ;; source: https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
 (require 'llvm-mode)
