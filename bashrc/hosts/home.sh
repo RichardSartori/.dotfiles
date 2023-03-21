@@ -10,4 +10,5 @@ export MPI_HOME=${LIB_DIR}/openmpi-4.1.4/install
 export GO_HOME=${LIB_DIR}/go-1.17.3
 export GOPATH=/home/richard/Documents/MyProjects/GO
 export CARGO_HOME=${LIB_DIR}/rust/cargo
+export PGMATH_HOME=${LIB_DIR}/libpgmath/install
 alias mk="${LIB_DIR}/man_perso.sh"
