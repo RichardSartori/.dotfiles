@@ -245,6 +245,7 @@ alias grep="grep --color"
 alias tree="tree -C --dirsfirst"
 alias valgrind="valgrind --leak-check=yes -v --track-origins=yes --show-reachable=yes"
 alias python="python3 -q"
+alias make="make --no-print-directory"
 
 gccflags="-Wall -Wextra -Werror -fmax-errors=1"
 alias gcc="gcc -std=c99 ${gccflags}"
