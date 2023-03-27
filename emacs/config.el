@@ -18,7 +18,7 @@
 ;; show matching parenthesis
 (show-paren-mode 1)
 
-;; tab with
+;; tab width
 (setq-default tab-width 4)
 
 ;; tab behavior
