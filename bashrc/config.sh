@@ -99,7 +99,7 @@ white=${reset}$(tput setaf 231)
 #### random_color=${bold}$(tput setaf $((RANDOM % 6 + 1)))
 #### $(shuf -i 1-6 -n 1)
 
-# export man style
+# export pager style
 export PAGER="less -FMR"
 export LESS_TERMCAP_md=${yellow}		# identifiers style
 export LESS_TERMCAP_us=${cyan}			# parameters style
@@ -108,17 +108,20 @@ export LESS_TERMCAP_me=${reset}			# reset identifiers style
 export LESS_TERMCAP_ue=${reset}			# reset parameters style
 export LESS_TERMCAP_se=${reset}			# reset last line style
 
+# export man style
 export MANPAGER="$PAGER +Gg"
+
+# export editor
+export EDITOR="emacs -nw"
 
 # ssh aliases for gateway
 alias plafrim="ssh rsartori@plafrim"
 alias nwadmin="ssh sartorir@nwadmin.frec.bull.fr"
-####alias dalton="ssh rsartori@dalton.bordeaux.inria.fr"
-function dalton {
+alias dalton="dalton_setup && ssh rsartori@dalton.bordeaux.inria.fr"
+function dalton_setup {
 	ssh-agent
 	eval "$(ssh-agent)"
 	ssh-add -l
-	ssh rsartori@dalton
 }
 
 # scp aliases
@@ -258,7 +261,7 @@ alias clang++="clang++ -std=c++17 ${clangflags}"
 
 # other aliases
 alias net="rm *~ .*~ \#* .\#*"
-alias m="emacs -nw"
+alias m="$EDITOR"
 alias c="cd -"
 alias ram="ps a -o cmd=COMMAND,pid=ID,stat=STATE,rss=USED,vsz=ALLOCATED --sort=-vsz | grep '\(^/\)\|\(ps a -o\)\|\(grep\)' -v"
 alias hellothere="echo 'General Kenobi!'"
