@@ -18,6 +18,9 @@
 ;; show matching parenthesis
 (show-paren-mode 1)
 
+;; automatic reload when file changed on disk
+(global-auto-revert-mode t)
+
 ;; tab width
 (setq-default tab-width 4)
 
