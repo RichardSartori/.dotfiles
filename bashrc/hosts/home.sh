@@ -1,5 +1,5 @@
 WORKDIR=/home/richard/Documents/Professional/INRIA-ATOS-BULL/These-gitlab/llvm_pass
-PERSODIR=/home/richard/Documents/MyProjects/RUST
+PERSODIR=/home/richard/Documents/MyProjects/RUST/UNFINISHED/calendar
 UNITYDIR=/home/richard/Documents/MyProjects/UNITY/godWork
 alias cdu="cd $UNITYDIR"
 alias cdd="cd ~/Downloads"
