@@ -89,6 +89,10 @@
 (require 'auto-complete)
 (ac-config-default)
 
+;; rust syntax highlighting + auto-complete
+(require 'rust-mode)
+(add-to-list 'ac-modes 'rust-mode)
+
 ;; multiple cursors
 (require 'multiple-cursors)
 (global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
