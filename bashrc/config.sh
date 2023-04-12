@@ -36,7 +36,8 @@ fi
 # set proxy if defined
 if ! [ -z "$PROXY" ]; then
 	export http_proxy=$PROXY
-	export https_proxy=`echo $PROXY | sed "s/http/https/g"`
+	#### `echo $PROXY | sed "s/http/https/g"`
+	export https_proxy=$PROXY
 fi
 
 # history control
