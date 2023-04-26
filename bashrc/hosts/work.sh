@@ -12,9 +12,8 @@ export MPI_HOME=${LIBS_DIR}/openmpi-4.1.4/install
 export DUMPI_HOME=${LIBS_DIR}/sst-dumpi/install
 export PGMATH_HOME=${LIBS_DIR}/libpgmath/install
 export CMAKE_HOME=${LIBS_DIR}/cmake-3.26.3/install
-export RUST_HOME=${LIBS_DIR}/rust
-export RUSTUP_HOME=${RUST_HOME}
-export CARGO_HOME=${RUST_HOME}
+export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
+export CARGO_HOME=${LIBS_DIR}/rust/cargo
 function winopen {
 	path=`realpath $1`
 	rootpath=C:/Users/a800323/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/
