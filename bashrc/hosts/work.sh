@@ -1,8 +1,5 @@
-#### PROXY=http://193.56.47.8:80
-#### PROXY=http://193.56.47.8:8080
-#### PROXY=proxy-fr.glb.my-it-solutions.net:84
-#### unset http_proxy # is set to http://193.56.47.8:8080 for some reason
-PROXY=http://193.56.47.20:8080
+#### PROXY=http://193.56.47.20:8080 # Atos
+unset http_proxy # Inria
 WORKDIR=~/THESIS-gitlab/llvm_pass
 SHARED_FOLDER=/mnt/c/SHARED_FOLDER
 alias cds="cd $SHARED_FOLDER"
