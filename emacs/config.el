@@ -53,15 +53,17 @@
 (global-whitespace-mode)
 
 ;; location of custom scripts (in the same directory as this file)
-(add-to-list 'load-path              (file-name-directory (file-truename load-file-name)))
-(add-to-list 'custom-theme-load-path (file-name-directory (file-truename load-file-name)))
+(add-to-list 'load-path
+	(file-name-directory (file-truename load-file-name)))
+(add-to-list 'custom-theme-load-path
+	(file-name-directory (file-truename load-file-name)))
 
 ;; syntax highlighting for LLVM
-;; source: https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
+;; https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
 (require 'llvm-mode)
 
 ;; sublime-text looking theme
-;; source: https://github.com/oneKelvinSmith/monokai-emacs/blob/master/monokai-theme.el
+;; https://github.com/oneKelvinSmith/monokai-emacs/blob/master/monokai-theme.el
 (load-theme 'monokai t)
 
 ;; location of auto-saves
@@ -105,3 +107,14 @@
 	("FIXME" . "#00FF00")
 	("TMP"   . "#00FF00")))
 (global-hl-todo-mode)
+
+;; highlight words beyond 80th column
+(require 'column-enforce-mode)
+(setq column-enforce-column 80)
+(defface black-on-red `((t (
+	:inherit font-lock-warning-face
+	:background "red")))
+	"custom face for column-enforce-face"
+	:group 'column-enforce)
+(setq column-enforce-face 'black-on-red)
+(global-column-enforce-mode t)
