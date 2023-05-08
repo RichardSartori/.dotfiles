@@ -19,12 +19,10 @@
 (show-paren-mode 1)
 
 ;; automatic reload when file changed on disk
-(global-auto-revert-mode t)
-
-;; tab width
-(setq-default tab-width 4)
+(global-auto-revert-mode)
 
 ;; tab behavior
+(setq-default tab-width 4)
 (defun enable-tabs ()
 	;; TAB to next tab-stop
 	(local-set-key (kbd "TAB") 'tab-to-tab-stop)
@@ -34,8 +32,20 @@
 	(setq electric-indent-mode nil)
 )
 
-;; execute 'enable-tabs in prog env
-(add-hook 'prog-mode-hook 'enable-tabs)
+;; fill-paragraph behavior
+(defconst max-column 80)
+(defun apply-max-column ()
+	(set-fill-column max-column))
+
+;; list of hooks to add a behavior to
+(defconst hooks (list 'prog-mode-hook 'tex-mode-hook))
+(defun add-to-hooks (func)
+	(dolist (mode hooks)
+		(add-hook mode func)))
+
+;; add previous behaviors to listed hooks
+(add-to-hooks 'enable-tabs)
+(add-to-hooks 'apply-max-column)
 
 ;; delete tabs at once
 (setq backward-delete-char-untabify-method 'hungry)
@@ -46,7 +56,7 @@
 ;; show tabs as pipe
 (setq whitespace-display-mappings '((tab-mark 9 [124 9] [92 9])))
 
-;; color of tab symb
+;; color of tab symbol
 (custom-set-faces '(whitespace-tab ((t (:foreground "#636363")))))
 
 ;; whitespace mode everywhere
@@ -108,13 +118,15 @@
 	("TMP"   . "#00FF00")))
 (global-hl-todo-mode)
 
-;; highlight words beyond 80th column
+;; highlight text beyond max-column
 (require 'column-enforce-mode)
-(setq column-enforce-column 80)
+(setq column-enforce-column max-column)
 (defface black-on-red `((t (
 	:inherit font-lock-warning-face
 	:background "red")))
 	"custom face for column-enforce-face"
 	:group 'column-enforce)
 (setq column-enforce-face 'black-on-red)
-(global-column-enforce-mode t)
+(global-column-enforce-mode)
+(setq column-enforce-should-enable-p '(lambda ()
+	(derived-mode-p 'prog-mode 'tex-mode)))
