@@ -22,7 +22,8 @@
 (global-auto-revert-mode)
 
 ;; tab behavior
-(setq-default tab-width 4)
+(defconst tab-length 4)
+(setq-default tab-width tab-length)
 (defun enable-tabs ()
 	;; TAB to next tab-stop
 	(local-set-key (kbd "TAB") 'tab-to-tab-stop)
@@ -30,7 +31,8 @@
 	(setq indent-tabs-mode t)
 	;; do no indent automatically
 	(setq electric-indent-mode nil)
-)
+	;; set tab-width again
+	(setq tab-width tab-length))
 
 ;; fill-paragraph behavior
 (defconst max-column 80)
