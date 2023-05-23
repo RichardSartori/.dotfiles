@@ -1,4 +1,4 @@
-# .config_files
+# .dotfiles
 Configuration files used in my terminal
 
 # usage
@@ -19,18 +19,18 @@ In the following, replace $WHERE with where you cloned the repo (usually ~).
 # examples
 To use the .bashrc
 ```bash
-ln -s ~/.config_files/bashrc/config.sh ~/.bashrc
+ln -s ~/.dotfiles/bashrc/config.sh ~/.bashrc
 ```
 
 To use the .gitconfig I use at home
 ```bash
-ln -s ~/.config_files/gitconfig/config.gitconfig ~/.gitconfig
-ln -s ~/.config_files/gitconfig/hosts/home.gitconfig ~/.config_files/gitconfig/host
+ln -s ~/.dotfiles/gitconfig/config.gitconfig ~/.gitconfig
+ln -s ~/.dotfiles/gitconfig/hosts/home.gitconfig ~/.dotfiles/gitconfig/host
 ```
 
 To use my emacs configuration
 ```bash
-ln -s ~/.config_files/emacs/config.el ~/.emacs
+ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 ```
 
 # TODOs
