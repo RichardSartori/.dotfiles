@@ -145,9 +145,24 @@ alias del="\rm 2>/dev/null -rf"
 alias empty="del $TRASH/* $TRASH/.*"
 alias cdt="cd $TRASH"
 
+# alias for rust replacements
+if ! [ -z `which 2>/dev/null exa` ]; then
+	alias ls_local="exa"
+	alias ls_nosort="exa"
+else
+	alias ls_local="\ls --color=auto -v"
+	alias ls_nosort="\ls -U"
+fi
+if ! [ -z `which 2>/dev/null rg` ]; then
+	alias grep="rg"
+fi
+if ! [ -z `which 2>/dev/null fd` ]; then
+	alias find="fd"
+fi
+
 # ls aliases
 ls_max_files_shown=100
-function myls {
+function ls_max {
 	options="" ; dirs="" ; count=0 ; force=0 ; rec=""
 	while [[ $# -gt 0 ]]; do
 		arg=$1
@@ -155,18 +170,18 @@ function myls {
 			--force) shift ; force=1 ;;
 			-R) shift ; options="$options $arg" ; rec="-R" ;;
 			-*) shift ; options="$options $arg" ;;
-			*) shift ; dirs="$dirs $arg" ; c=`\ls -U $arg 2>/dev/null | wc -l` ; count=$((count+c)) ;;
+			*) shift ; dirs="$dirs $arg" ; c=`ls_nosort $arg 2>/dev/null | wc -l` ; count=$((count+c)) ;;
 		esac
 	done
-	if [ "$dirs" = "" ]; then count=`\ls -U $rec . 2>/dev/null | wc -l`; fi
+	if [ "$dirs" = "" ]; then count=`ls_nosort $rec . 2>/dev/null | wc -l`; fi
 	if [[ $count -gt $ls_max_files_shown ]] && [[ $force -ne 1 ]]
 	then
 		echo "too many files ($count), use --force"
 	else
-		\ls $options $dirs
+		ls_local $options $dirs
 	fi
 }
-alias ls="myls --color=auto --group-directories-first -v"
+alias ls="ls_max --group-directories-first"
 alias ll="ls -ahl"
 alias l.="ls -d .*"
 
@@ -233,20 +248,20 @@ if ! [ -z `which 2>/dev/null rustc` ]; then
 		fi
 	}
 fi
-if ! [ -z `which 2>/dev/null batcat` ]; then
+if ! [ -z `which 2>/dev/null bat` ]; then
 	function mybatcat {
 		wc=`cat 2>/dev/null $@ | wc -l`
+		wc=$((wc+4))
 		max=`tput lines`
 		options=""
 		if [ $wc -ge $max ]; then options="+Gg"; fi
-		batcat --style=header,grid,numbers --paging=always --pager="less -RMF $options" $@
+		bat --style=header,grid,numbers --paging=always --pager="less -RMF $options" $@
 	}
 	alias more="mybatcat"
 fi
 
 # defaults parameters
-alias grep="grep --color"
-alias tree="tree -C --dirsfirst"
+alias tree="ls -T"
 alias valgrind="valgrind --leak-check=yes -v --track-origins=yes --show-reachable=yes"
 alias python="python3 -q"
 alias make="make --no-print-directory"
@@ -287,7 +302,7 @@ function set_PS1 {
 	if [ $tmp -gt $pwd_max_length ]
 	then pwd=`echo $pwd | cut -c$((tmp-pwd_max_length+4))-`; pwd="<?> $pwd"; fi
 	pwd="$greenp$pwd "
-	tmp=`git branch 2>/dev/null | grep "*" | cut -b 3-`
+	tmp=`git branch 2>/dev/null | grep "[*]" | cut -b 3-`
 	if [ `echo $tmp | wc -c` -eq 1 ]
 	then git=""; else git="$cyanp($tmp) "; fi
 	tmp=`date +%H:%M:%S`
