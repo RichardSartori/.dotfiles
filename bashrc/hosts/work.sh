@@ -11,10 +11,5 @@ export PGMATH_HOME=${LIBS_DIR}/libpgmath/install
 export CMAKE_HOME=${LIBS_DIR}/cmake-3.26.3/install
 export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
 export CARGO_HOME=${LIBS_DIR}/rust/cargo
-function winopen {
-	path=`realpath $1`
-	rootpath=C:/Users/a800323/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/
-	cmd.exe /c start $rootpath$path
-}
-alias evince="winopen"
+alias evince="wslview"
 export _INKSCAPE_GC=disable # inkscape fix
