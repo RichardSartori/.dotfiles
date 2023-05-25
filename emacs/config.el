@@ -111,6 +111,8 @@
 (require 'multiple-cursors)
 (global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
 (global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
+(global-set-key (kbd "<M-right>") 'mc/mark-next-like-this)
+(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this)
 
 ;; highlight keywords
 (require 'hl-todo)
