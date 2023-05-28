@@ -11,9 +11,9 @@
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
-(setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode)
 (setq column-number-mode t)
+;(setq display-line-numbers-type 'relative)
 
 ;; show matching parenthesis
 (show-paren-mode 1)
@@ -99,12 +99,12 @@
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
 
-;; general auto-complete
+;; syntax highlighting for Rust
+(require 'rust-mode)
+
+;; general auto-completion
 (require 'auto-complete)
 (ac-config-default)
-
-;; rust syntax highlighting + auto-complete
-(require 'rust-mode)
 (add-to-list 'ac-modes 'rust-mode)
 
 ;; multiple cursors
