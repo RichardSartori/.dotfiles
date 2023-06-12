@@ -66,20 +66,21 @@
 (ido-mode 1)
 
 ;; key bindings
-(global-set-key (kbd "C-x C-x") 'kill-region); cut
-(global-set-key (kbd "C-f") 'isearch-forward)
-(global-set-key (kbd "C-q") 'keyboard-quit)
-(global-set-key (kbd "C-w") 'save-buffers-kill-terminal)
+(global-set-key (kbd "C-v") 'yank); paste
+(global-set-key (kbd "C-f") 'isearch-forward); find
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(global-set-key (kbd "C-s") 'save-buffer); save
+(global-set-key (kbd "C-w") 'save-buffers-kill-terminal); quit
 
 ; TODO: other bindings, use C-h b to show emacs bindings
-; TODO: find a command other than C-c to set as prefix
-;(global-set-key (kbd "C-c C-c") 'kill-ring-save); copy FIXME: C-c is prefix
-;(global-set-key (kbd "<C-v C-v>") 'yank); paste FIXME: conflict in latex-mode
-;(global-set-key (kbd "C-s") 'save-buffer) FIXME: conflict when in search mode
+; TODO: try to keep usual OS bindings
+; TODO: find alternatives for prefix commands
+;(global-set-key (kbd "C-c") 'kill-ring-save); copy FIXME: C-c is prefix
+;(global-set-key (kbd "C-x") 'kill-region); cut FIXME: C-x is prefix
 ;(global-set-key (kbd "<C-TAB>") '<C-x o>) FIXME: how to map <C-TAB> to <C-x o>
-;(global-set-key (kbd "C-z") 'undo) FIXME: C-z is used to go back to terminal
+;(global-set-key (kbd "C-z") 'undo) FIXME: C-z bring back to the terminal
 ;(global-set-key (kbd "C-y") 'redo) FIXME: 'redo is not a function
-;(global-set-key (kbd "C-g") 'goto-line) FIXME: already mapped to keyboard-quit
 
 ;; update packages :
 ;; `M-x list-packages`
