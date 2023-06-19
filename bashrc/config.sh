@@ -41,7 +41,7 @@ if ! [ -z "$PROXY" ]; then
 fi
 
 # history control
-HISTCONTROL=ignoreboth
+HISTCONTROL=erasedups
 HISTSIZE=2000
 HISTFILESIZE=2000
 HISTTIMEFORMAT="%R  "
