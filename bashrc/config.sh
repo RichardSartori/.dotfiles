@@ -115,14 +115,15 @@ export MANPAGER="$PAGER +Gg"
 # export editor
 export EDITOR="emacs -nw"
 
-# ssh aliases for gateway
-alias plafrim="ssh rsartori@plafrim"
-alias nwadmin="ssh sartorir@nwadmin.frec.bull.fr"
-alias dalton="dalton_setup && ssh rsartori@dalton.bordeaux.inria.fr"
-function dalton_setup {
-	ssh-agent
-	eval "$(ssh-agent)"
-	ssh-add -l
+# ssh aliases
+alias plafrim="ssh_key_setup && ssh plafrim"
+alias nwadmin="ssh_key_setup && ssh nwadmin"
+alias dalton="ssh_key_setup && ssh dalton"
+function ssh_key_setup {
+	if [ -z $SSH_AGENT_PID ]; then
+		eval "$(ssh-agent)"
+		ssh-add
+	fi
 }
 
 # scp aliases
