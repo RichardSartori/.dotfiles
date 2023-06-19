@@ -15,9 +15,10 @@ In the following, replace $WHERE with where you cloned the repo (usually ~).
 | $WHERE/gitconfig/hosts/*          | $WHERE/gitconfig/host |
 | $WHERE/emacs/config.el            | ~/.emacs              |
 | $WHERE/misc/gdbinit.py            | ~/.gdbinit            |
+| $WHERE/misc/ssh.config            | ~/.ssh/config         |
 
 # examples
-To use the .bashrc
+To use my .bashrc
 ```bash
 ln -s ~/.dotfiles/bashrc/config.sh ~/.bashrc
 ```
@@ -34,5 +35,5 @@ ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 ```
 
 # TODOs
-  1. .ssh/config
-  2. complete bashrc/hosts/cluster*
+  1. complete bashrc/hosts/cluster*
+  2. complete emacs/config.el key bindings
