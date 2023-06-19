@@ -1,6 +1,6 @@
-WORKDIR=/home/richard/Documents/Professional/INRIA-ATOS-BULL/These-gitlab/llvm_pass
-PERSODIR=/home/richard/Documents/MyProjects/RUST/UNFINISHED
-UNITYDIR=/home/richard/Documents/MyProjects/UNITY/godWork
+WORKDIR=~/Documents/Professional/INRIA-ATOS-BULL/These-gitlab/llvm_pass
+PERSODIR=~/Documents/MyProjects/RUST
+UNITYDIR=~/Documents/MyProjects/UNITY/godWork
 alias cdu="cd $UNITYDIR"
 alias cdd="cd ~/Downloads"
 export LIBS_DIR=/home/richard/Documents/Libraries

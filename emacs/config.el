@@ -70,24 +70,31 @@
 (global-set-key (kbd "C-f") 'isearch-forward); find
 (define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before max-column
 (global-set-key (kbd "C-s") 'save-buffer); save
-(global-set-key (kbd "C-w") 'save-buffers-kill-terminal); quit
 
-; TODO: other bindings, use C-h b to show emacs bindings
+; TODO: other bindings
 ; TODO: try to keep usual OS bindings
 ; TODO: find alternatives for prefix commands
+; TODO: run (loop (key func) (define-key local-map key func)) in hooks
+; NOTE: use C-h b to show emacs bindings
+; NOTE: use C-h k <keys> to see what function <keys> run
 ;(global-set-key (kbd "C-c") 'kill-ring-save); copy FIXME: C-c is prefix
 ;(global-set-key (kbd "C-x") 'kill-region); cut FIXME: C-x is prefix
 ;(global-set-key (kbd "<C-TAB>") '<C-x o>) FIXME: how to map <C-TAB> to <C-x o>
 ;(global-set-key (kbd "C-z") 'undo) FIXME: C-z bring back to the terminal
 ;(global-set-key (kbd "C-y") 'redo) FIXME: 'redo is not a function
+;(global-set-key (kbd "C-w") 'save-buffers-kill-terminal); quit FIXME: is cut
+;(global-set-key (kbd "C-0") 'delete-window) FIXME: does not work
+;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: does not work
+;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
+;(global-set-key (kbd "C-3") 'split-window-right) FIXME: does not work
 
-;; update packages :
-;; `M-x list-packages`
-;; `C-s installed` and find installed packages
-;; type U (uppercase u) on the left of the package you want to upgrade
-;; type x to apply upgrades
-;; type q to quit
+;; update packages:
+;; type `M-x list-packages`
+;; type `S-u` (SHIFT u) to find upgrades
+;; type `x` to apply upgrades
+;; type `q` to quit
 
 ;; ============================================ ;;
 ;; commands below require non built-in packages ;;
