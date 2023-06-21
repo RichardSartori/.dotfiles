@@ -12,8 +12,8 @@ case $HOSTNAME in
 
 	miriel* | bora*)
 		export LLVM_HOME=${LIBS_DIR}/llvm-15/install
-		export MPI_HOME=${LIBS_DIR}/OPENMPI/openmpi-4.1.5/install
-		module load compiler/gcc/12.2.0 hardware/hwloc build/cmake
+		module load compiler/gcc/12.2.0 mpi/openmpi/4.1.5
+		module load hardware/hwloc build/cmake
 		;;
 
 esac
