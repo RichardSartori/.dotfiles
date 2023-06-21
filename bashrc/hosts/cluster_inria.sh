@@ -2,6 +2,7 @@ WORKDIR=/home/rsartori/THESE
 STOREDIR=/beegfs/rsartori
 alias cds="cd $STOREDIR"
 export LIBS_DIR=${STOREDIR}/LIBS
+source /etc/bash_completion.d/git
 
 case $HOSTNAME in
 
