@@ -248,6 +248,7 @@ if ! [ -z `which 2>/dev/null rustc` ]; then
 			firefox --new-tab "site:doc.rust-lang.org $1 - Rust"
 		fi
 	}
+	alias clippy="cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used"
 fi
 if ! [ -z `which 2>/dev/null bat` ]; then
 	function mybatcat {
