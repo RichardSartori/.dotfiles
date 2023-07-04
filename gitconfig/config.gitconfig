@@ -1,5 +1,7 @@
 [include]
 	path = ~/.dotfiles/gitconfig/host
+[pull]
+	ff = only
 [alias]
 	what = log --oneline -n 10
 	hsup = pull
