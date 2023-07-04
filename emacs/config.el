@@ -21,11 +21,18 @@
 (global-auto-revert-mode)
 
 ;; tab behavior
-(setq-default tab-width 4)
+(defconst my-tab-width 4)
+(setq-default tab-width my-tab-width)
 (setq-default tab-stop-list nil)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
-(setq indent-tabs-mode t)
-(setq electric-indent-mode nil)
+(defun my-tab-behavior ()
+	(setq indent-tabs-mode t)
+	(setq electric-indent-mode nil)
+	(when (derived-mode-p 'python-mode)
+		(setq python-indent my-tab-width)
+		(setq tab-width my-tab-width)))
+(add-hook 'prog-mode-hook 'my-tab-behavior)
+(add-hook 'tex-mode-hook 'my-tab-behavior)
 
 ;; show tabs as gray pipe
 (setq whitespace-display-mappings '((tab-mark 9 [124 9] [92 9])))
@@ -35,8 +42,8 @@
 (setq backward-delete-char-untabify-method nil)
 
 ;; fill-paragraph behavior
-(defconst max-column 80)
-(set-fill-column max-column)
+(defconst my-max-column 80)
+(set-fill-column my-max-column)
 
 ;; show trailing spaces/tabs
 (setq whitespace-style '(face tabs tab-mark trailing))
@@ -70,7 +77,7 @@
 (global-set-key (kbd "C-f") 'isearch-forward); find
 (define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
-(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before max-column
+(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
 (global-set-key (kbd "C-s") 'save-buffer); save
 
 ; TODO: other bindings
@@ -129,9 +136,9 @@
 		("TMP"   . "#00FF00")))
 	(global-hl-todo-mode)
 
-	;; highlight text beyond max-column
+	;; highlight text beyond my-max-column
 	(require 'column-enforce-mode)
-	(setq column-enforce-column max-column)
+	(setq column-enforce-column my-max-column)
 	(defface black-on-red `((t (
 		:inherit font-lock-warning-face
 		:background "red")))
