@@ -2,7 +2,6 @@ case $HOSTNAME in
 
 	nwadmin)
 		PROXY=http://193.56.47.8:80
-		ssh pise0
 		;;
 
 	pise*)

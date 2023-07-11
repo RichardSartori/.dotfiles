@@ -119,6 +119,7 @@ export EDITOR="emacs -nw"
 alias plafrim="ssh_key_setup && ssh plafrim"
 alias nwadmin="ssh_key_setup && ssh nwadmin"
 alias dalton="ssh_key_setup && ssh dalton"
+alias pise="ssh_key_setup && ssh pise"
 function ssh_key_setup {
 	if [ -z $SSH_AGENT_PID ]; then
 		eval "$(ssh-agent)"
@@ -133,7 +134,7 @@ function myscp {
 	scp -l 1000 $rec $2 $1
 }
 alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
-alias sendtonwadmin="myscp sartorir@nwadmin.frec.bull.fr:/home_nfs/sartorir"
+alias sendtonwadmin="myscp sartorir@nwadmin:/home_nfs/sartorir"
 alias sendtodalton="myscp rsartori@dalton:/home/rsartori"
 
 # avoid mistakes
