@@ -20,19 +20,21 @@
 ;; automatic reload when file changed on disk
 (global-auto-revert-mode)
 
-;; tab behavior
+;; my preferences
+(defconst my-max-column 80)
 (defconst my-tab-width 4)
 (setq-default tab-width my-tab-width)
 (setq-default tab-stop-list nil)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
-(defun my-tab-behavior ()
+(defun my-preferences ()
+	(set-fill-column my-max-column)
 	(setq indent-tabs-mode t)
 	(setq electric-indent-mode nil)
 	(when (derived-mode-p 'python-mode)
 		(setq python-indent my-tab-width)
 		(setq tab-width my-tab-width)))
-(add-hook 'prog-mode-hook 'my-tab-behavior)
-(add-hook 'tex-mode-hook 'my-tab-behavior)
+(add-hook 'prog-mode-hook 'my-preferences)
+(add-hook 'tex-mode-hook 'my-preferences)
 
 ;; show tabs as gray pipe
 (setq whitespace-display-mappings '((tab-mark 9 [124 9] [92 9])))
@@ -40,10 +42,6 @@
 
 ;; delete tabs at once
 (setq backward-delete-char-untabify-method nil)
-
-;; fill-paragraph behavior
-(defconst my-max-column 80)
-(set-fill-column my-max-column)
 
 ;; show trailing spaces/tabs
 (setq whitespace-style '(face tabs tab-mark trailing))
