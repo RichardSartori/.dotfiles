@@ -45,8 +45,11 @@ HISTCONTROL=erasedups
 HISTSIZE=2000
 HISTFILESIZE=2000
 HISTTIMEFORMAT="%R  "
+
+# shell options
 shopt -s histappend
 shopt -s checkwinsize
+shopt -s autocd
 
 # frequently used directories
 STARTDIR=~
