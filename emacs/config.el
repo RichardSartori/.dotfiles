@@ -12,6 +12,7 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (global-display-line-numbers-mode)
+(global-hl-line-mode)
 (setq column-number-mode t)
 
 ;; show matching parenthesis
@@ -23,18 +24,18 @@
 ;; my preferences
 (defconst my-max-column 80)
 (defconst my-tab-width 4)
+(setq-default fill-column my-max-column)
 (setq-default tab-width my-tab-width)
 (setq-default tab-stop-list nil)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
-(defun my-preferences ()
-	(set-fill-column my-max-column)
+
+;; preferences set in every buffer
+(add-hook 'after-change-major-mode-hook (lambda ()
 	(setq indent-tabs-mode t)
 	(setq electric-indent-mode nil)
 	(when (derived-mode-p 'python-mode)
 		(setq python-indent my-tab-width)
-		(setq tab-width my-tab-width)))
-(add-hook 'prog-mode-hook 'my-preferences)
-(add-hook 'tex-mode-hook 'my-preferences)
+		(setq tab-width my-tab-width))))
 
 ;; show tabs as gray pipe
 (setq whitespace-display-mappings '((tab-mark 9 [124 9] [92 9])))
@@ -104,38 +105,36 @@
 ;; ============================================ ;;
 ;; commands below require non built-in packages ;;
 ;; ============================================ ;;
-(defconst with-external t) ; set to nil if unable to install packages
-(when with-external
 
-	;; M-x auto-complete
-	(require 'smex)
-	(global-set-key (kbd "M-x") 'smex)
+;; M-x auto-complete
+(when (require 'smex nil t)
+	(global-set-key (kbd "M-x") 'smex))
 
-	;; syntax highlighting for Rust
-	(require 'rust-mode)
+;; syntax highlighting for Rust
+(require 'rust-mode nil t)
 
-	;; general auto-completion
-	(require 'auto-complete)
+;; general auto-completion
+(when (require 'auto-complete nil t)
 	(ac-config-default)
-	(add-to-list 'ac-modes 'rust-mode)
+	(add-to-list 'ac-modes 'rust-mode))
 
-	;; multiple cursors
-	(require 'multiple-cursors)
+;; multiple cursors
+(when (require 'multiple-cursors nil t)
 	(global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
 	(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
 	(global-set-key (kbd "<M-right>") 'mc/mark-next-like-this)
-	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this)
+	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this))
 
-	;; highlight keywords
-	(require 'hl-todo)
+;; highlight keywords
+(when (require 'hl-todo nil t)
 	(setq hl-todo-keyword-faces '(
 		("TODO"  . "#00FF00")
 		("FIXME" . "#00FF00")
 		("TMP"   . "#00FF00")))
-	(global-hl-todo-mode)
+	(global-hl-todo-mode))
 
-	;; highlight text beyond my-max-column
-	(require 'column-enforce-mode)
+;; highlight text beyond my-max-column
+(when (require 'column-enforce-mode nil t)
 	(setq column-enforce-column my-max-column)
 	(defface black-on-red `((t (
 		:inherit font-lock-warning-face
@@ -145,5 +144,4 @@
 	(setq column-enforce-face 'black-on-red)
 	(global-column-enforce-mode)
 	(setq column-enforce-should-enable-p '(lambda ()
-		(derived-mode-p 'prog-mode 'tex-mode)))
-)
+		(derived-mode-p 'prog-mode 'tex-mode))))
