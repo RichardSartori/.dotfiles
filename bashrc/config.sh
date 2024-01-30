@@ -9,6 +9,9 @@ case $- in
 	*) return ;;
 esac
 
+# non blinking cursor
+printf "\033[?12l"
+
 # source plateform specific values
 location=`echo ~/.bashrc | xargs realpath | xargs dirname`
 if [ -f $location/host ]; then

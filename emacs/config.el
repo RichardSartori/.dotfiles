@@ -12,8 +12,12 @@
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (global-display-line-numbers-mode)
-(global-hl-line-mode)
 (setq column-number-mode t)
+
+;; visible cursor
+(blink-cursor-mode 0)
+(setq visible-cursor nil)
+(global-hl-line-mode)
 
 ;; show matching parenthesis
 (show-paren-mode 1)
