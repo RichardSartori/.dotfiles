@@ -36,4 +36,5 @@ ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 
 # TODOs
   1. complete bashrc/hosts/cluster*
-  2. complete emacs/config.el key bindings
+  2. complete emacs/config.el key bindings (remove all C-c bindings)
+  3. gather all host specific configuration into a single directory

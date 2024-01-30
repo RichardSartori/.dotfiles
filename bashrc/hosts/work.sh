@@ -1,5 +1,5 @@
 #export PROXY=host.containers.internal:9000
-WORKDIR=~/THESIS-gitlab/llvm_pass
+WORKDIR=~/THESIS-gitlab
 SHARED_FOLDER=/mnt/c/SHARED_FOLDER
 alias cds="cd $SHARED_FOLDER"
 export LIBS_DIR=/home/rsartori/LIBS
@@ -10,3 +10,4 @@ export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
 export CARGO_HOME=${LIBS_DIR}/rust/cargo
 alias evince="wslview"
 export _INKSCAPE_GC=disable # inkscape fix
+export PYTHON_HOME=/home/rsartori/.local
