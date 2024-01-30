@@ -5,6 +5,8 @@
 [alias]
 	what = log --oneline -n 10
 	hsup = pull
+	hist = log --follow -p --
+	fix = pull --no-ff
 [color]
 	ui = auto
 [color "diff"]
