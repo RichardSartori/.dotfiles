@@ -9,9 +9,6 @@ case $- in
 	*) return ;;
 esac
 
-# non blinking cursor
-printf "\033[?12l"
-
 # source plateform specific values
 location=`echo ~/.bashrc | xargs realpath | xargs dirname`
 if [ -f $location/host ]; then
@@ -19,6 +16,9 @@ if [ -f $location/host ]; then
 else
 	echo "unknown host"
 fi
+
+# non blinking cursor
+printf "\033[?12l"
 
 # squeue aliases & functions
 if ! [ -z `which 2>/dev/null squeue` ]; then
@@ -120,6 +120,10 @@ export MANPAGER="$PAGER +Gg"
 
 # export editor
 export EDITOR="emacs -nw"
+#### TODO: start emacs daemon and use emacsclient as EDITOR
+#### export EMACS_SERVER="emacs_server"
+#### emacs --bg-daemon=$EMACS_SERVER 2>/dev/null
+#### export EDITOR="emacsclient -nw --socket-name=$EMACS_SERVER"
 
 # ssh aliases
 alias plafrim="ssh_key_setup && ssh plafrim"
@@ -255,7 +259,8 @@ if ! [ -z `which 2>/dev/null rustc` ]; then
 			firefox --new-tab "site:doc.rust-lang.org $1 - Rust"
 		fi
 	}
-	alias clippy="cargo clippy -- -W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used"
+	export CLIPPY_ARGS="-W clippy::pedantic -W clippy::nursery -W clippy::unwrap_used"
+	alias clippy="cargo clippy -- $CLIPPY_ARGS"
 fi
 if ! [ -z `which 2>/dev/null bat` ]; then
 	function mybatcat {
