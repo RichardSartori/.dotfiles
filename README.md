@@ -28,12 +28,12 @@ ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 ```
 
 # TODOs
-  1. complete emacs/config.el key bindings (see TODOs inside)
+1. complete emacs/config.el key bindings (see TODOs inside)
     * https://www.reddit.com/r/emacs/comments/8apn20
     * https://github.com/darkstego/wakib-keys
-  2. complete bashrc/config.sh EDITOR export (see TODOs inside)
+2. complete bashrc/config.sh EDITOR export (see TODOs inside)
     * https://wikemacs.org/wiki/Emacs_server
-  3. modify bashrc/config.sh update function to update everything
+3. modify bashrc/config.sh update function to update everything
     * apt update + apt upgrade
     * rustup update
     * emacs M-x list-packages S-u x
