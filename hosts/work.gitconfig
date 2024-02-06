@@ -2,6 +2,6 @@
 	name = SARTORI, Richard
 	email = richard.sartori@atos.net
 #[http]
-#	proxy = http://193.56.47.8:8080
+#	proxy = host.containers.internal:9000
 #[https]
-#	proxy = https://193.56.47.8:8080
+#	proxy = host.containers.internal:9000

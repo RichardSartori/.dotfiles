@@ -15,7 +15,7 @@ case $HOSTNAME in
 		export NPB_HOME=~/LIBS/NPB-3.4.1/NPB3.4-MPI/bin
 		export OPEN64_HOME=~/LIBS/open64-4.2/bin
 		export SHAMAN_HOME=~/LIBS/shaman
-		module load openmpi/gnu/4.1.4.1
+		module load openmpi/gnu/4.1.5.4
 		;;
 
 esac
