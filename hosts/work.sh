@@ -1,4 +1,4 @@
-#export PROXY=host.containers.internal:9000
+export PROXY=host.containers.internal:9000
 WORKDIR=~/THESIS-gitlab
 SHARED_FOLDER=/mnt/c/SHARED_FOLDER
 alias cds="cd $SHARED_FOLDER"
