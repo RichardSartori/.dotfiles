@@ -78,6 +78,7 @@ fi
 # export paths
 for path in `env | grep "_HOME" | cut -d '=' -f 2`; do
 	export PATH=${path}/bin:${PATH}
+	export CPATH=${path}/include:${CPATH}
 	export LIBRARY_PATH=${path}/lib:${LIBRARY_PATH}
 	export LD_LIBRARY_PATH=${path}/lib:${LD_LIBRARY_PATH}
 done
