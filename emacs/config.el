@@ -149,3 +149,8 @@
 	(global-column-enforce-mode)
 	(setq column-enforce-should-enable-p '(lambda ()
 		(derived-mode-p 'prog-mode 'tex-mode))))
+
+;; keep current function/class/namespace visible
+(when (require 'stickyfunc-enhance nil t)
+	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+	(semantic-mode 1))
