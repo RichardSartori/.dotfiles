@@ -1,8 +1,13 @@
-;; initialize packages
+; TODO: check if required
 (package-initialize)
 
+;; fast startup
+; (custom-set-variables '(package-quickstart t))
+; TODO: check if 1. it broke anything 2. it is faster
+; TODO: add (package-quickstart-refresh) after a package update
+
 ;; MELPA
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
 ;; no startup screen
 (setq inhibit-startup-screen t)
@@ -103,6 +108,7 @@
 ;; update packages:
 ;; type `M-x list-packages`
 ;; type `S-u` (SHIFT u) to find upgrades
+;; type `y` to accept upgrades
 ;; type `x` to apply upgrades
 ;; type `q` to quit
 
