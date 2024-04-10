@@ -28,13 +28,14 @@ ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 ```
 
 # TODOs
-1. complete emacs/config.el key bindings (see TODOs inside)
+1. complete emacs/config.el (see TODOs inside)
     * https://www.reddit.com/r/emacs/comments/8apn20
     * https://github.com/darkstego/wakib-keys
+    * https://robert.kra.hn/posts/rust-emacs-setup/
 2. complete bashrc/config.sh EDITOR export (see TODOs inside)
     * https://wikemacs.org/wiki/Emacs_server
-3. modify bashrc/config.sh update function to update everything
-    * apt update + apt upgrade
-    * rustup update
-    * emacs M-x list-packages S-u x
-    * pip install -U
+3. create a script/function to update everything (see misc/update.md)
+    * apt
+    * rustup
+    * emacs
+    * pip
