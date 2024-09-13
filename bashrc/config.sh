@@ -109,6 +109,7 @@ white=${reset}$(tput setaf 231)
 
 # export pager style
 export PAGER="less -FMR"
+export GROFF_NO_SGR=1 # for Konsole
 export LESS_TERMCAP_md=${yellow}		# identifiers style
 export LESS_TERMCAP_us=${cyan}			# parameters style
 export LESS_TERMCAP_so=$'\033[30;107m'	# last line style
@@ -128,9 +129,7 @@ export EDITOR="emacs -nw"
 
 # ssh aliases
 alias plafrim="ssh_key_setup && ssh plafrim"
-alias nwadmin="ssh_key_setup && ssh nwadmin"
 alias dalton="ssh_key_setup && ssh dalton"
-alias pise="ssh_key_setup && ssh pise"
 function ssh_key_setup {
 	if [ -z $SSH_AGENT_PID ]; then
 		eval "$(ssh-agent)"
@@ -145,7 +144,6 @@ function myscp {
 	scp -l 1000 $rec $2 $1
 }
 alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
-alias sendtonwadmin="myscp sartorir@nwadmin:/home_nfs/sartorir"
 alias sendtodalton="myscp rsartori@dalton:/home/rsartori"
 
 # avoid mistakes
