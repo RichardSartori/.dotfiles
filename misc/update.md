@@ -19,6 +19,7 @@ alias update="sudo -- sh -c 'apt update && apt list --upgradable && apt -y upgra
 
 execute the following list of commands programmatically
 M-x list-packages S-u y x q
+`emacs --script <update.el>`
 work in progress
 
 ```lisp
@@ -39,4 +40,12 @@ pip list --format=freeze | cut -d '=' -f 1 | xargs pip install --upgrade
 
 ```bash
 rustup update
+```
+
+update the rust analyzer alongside
+https://robert.kra.hn/posts/rust-emacs-setup/
+```bash
+cd ${LIBS_DIR}/rust/rust-analyzer
+git pull
+cargo xtask install --server
 ```

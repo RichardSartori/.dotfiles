@@ -161,6 +161,6 @@
 	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 	(semantic-mode 1))
 
-
 ; TODO: add lsp-mode and rust support
 ; https://robert.kra.hn/posts/rust-emacs-setup/
+; add documentation for gnu-elpa-keyring-update and lsp-mode
