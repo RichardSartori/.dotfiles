@@ -1,8 +1,5 @@
-WORKDIR=~/Documents/Professional/INRIA-ATOS-BULL/These-gitlab/llvm_pass
-#PERSODIR=~/Documents/MyProjects/RUST
-PERSODIR=~/Documents/MyProjects/PYTHON/AI_images
-UNITYDIR=~/Documents/MyProjects/UNITY/godWork
-alias cdu="cd $UNITYDIR"
+PERSODIR=~/Documents/MyProjects
+WORKDIR=${PERSODIR}
 alias cdd="cd ~/Downloads"
 export LIBS_DIR=/home/richard/Documents/Libraries
 export HWLOC_HOME=${LIBS_DIR}/hwloc/install
