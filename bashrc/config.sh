@@ -52,7 +52,7 @@ HISTTIMEFORMAT="%R  "
 # shell options
 shopt -s histappend
 shopt -s checkwinsize
-shopt -s autocd
+#### shopt -s autocd
 
 # frequently used directories
 STARTDIR=~
@@ -109,6 +109,7 @@ white=${reset}$(tput setaf 231)
 
 # export pager style
 export PAGER="less -FMR"
+export GROFF_NO_SGR=1 # for Konsole
 export LESS_TERMCAP_md=${yellow}		# identifiers style
 export LESS_TERMCAP_us=${cyan}			# parameters style
 export LESS_TERMCAP_so=$'\033[30;107m'	# last line style
@@ -120,17 +121,13 @@ export LESS_TERMCAP_se=${reset}			# reset last line style
 export MANPAGER="$PAGER +Gg"
 
 # export editor
-export EDITOR="emacs -nw"
-#### TODO: start emacs daemon and use emacsclient as EDITOR
-#### export EMACS_SERVER="emacs_server"
-#### emacs --bg-daemon=$EMACS_SERVER 2>/dev/null
-#### export EDITOR="emacsclient -nw --socket-name=$EMACS_SERVER"
+export EMACS_SERVER="emacs_server"
+emacs --bg-daemon=$EMACS_SERVER 2>/dev/null
+export EDITOR="emacsclient -nw --socket-name=$EMACS_SERVER"
 
 # ssh aliases
 ####alias plafrim="ssh_key_setup && ssh plafrim"
-####alias nwadmin="ssh_key_setup && ssh nwadmin"
 ####alias dalton="ssh_key_setup && ssh dalton"
-####alias pise="ssh_key_setup && ssh pise"
 function ssh_key_setup {
 	if [ -z $SSH_AGENT_PID ]; then
 		eval "$(ssh-agent)"
@@ -145,7 +142,6 @@ function myscp {
 	scp -l 1000 $rec $2 $1
 }
 #### alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
-#### alias sendtonwadmin="myscp sartorir@nwadmin:/home_nfs/sartorir"
 #### alias sendtodalton="myscp rsartori@dalton:/home/rsartori"
 
 # avoid mistakes
@@ -281,14 +277,19 @@ alias valgrind="valgrind --leak-check=yes -v --track-origins=yes --show-reachabl
 alias python="python3 -q"
 alias make="make --no-print-directory"
 
+cstandard="-std=c99"
+cppstandard="-std=c++20"
+fstandard="-std=f2018"
+
 gccflags="-Wall -Wextra -Werror -fmax-errors=1"
-alias gcc="gcc -std=c99 ${gccflags}"
-alias gpp="g++ -std=c++20 ${gccflags}"
-alias gfortran="gfortran -std=gnu ${gccflags}"
+alias gcc="gcc ${cstandard} ${gccflags}"
+alias gpp="g++ ${cppstandard} ${gccflags}"
+alias gfortran="gfortran ${fstandard} ${gccflags}"
 
 clangflags="-Wall -Wextra -Werror -ferror-limit=1"
-alias clang="clang -std=c99 ${clangflags}"
-alias clang++="clang++ -std=c++20 ${CLANG_GCC} ${clangflags}"
+alias clang="clang ${cstandard} ${clangflags}"
+alias clang++="clang++ ${cppstandard} ${clangflags} ${CLANG_GCC}"
+alias flang="flang ${fstandard} -Werror"
 
 # other aliases
 alias net="rm *~ .*~ \#* .\#*"

@@ -168,3 +168,4 @@
 
 ; TODO: add lsp-mode and rust support
 ; https://robert.kra.hn/posts/rust-emacs-setup/
+; add documentation for gnu-elpa-keyring-update and lsp-mode
