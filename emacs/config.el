@@ -105,12 +105,17 @@
 ;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
 ;(global-set-key (kbd "C-3") 'split-window-right) FIXME: does not work
 
-;; update packages:
-;; type `M-x list-packages`
-;; type `S-u` (SHIFT u) to find upgrades
-;; type `y` to accept upgrades
-;; type `x` to apply upgrades
-;; type `q` to quit
+(defun upgrade-packages ()
+	"Upgrade all installed Emacs packages."
+	(interactive)
+	(require 'package)
+	(package-initialize)
+	(package-refresh-contents)
+	(dolist (pkg package-alist)
+		(let ((name (car pkg)))
+			(when (package-installed-p name)
+				(package-reinstall name)))))
+;; fallback method: `M-x list-packages RET` `S-u` `y` `x` `q`
 
 ;; ============================================ ;;
 ;; commands below require non built-in packages ;;
@@ -160,7 +165,6 @@
 (when (require 'stickyfunc-enhance nil t)
 	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 	(semantic-mode 1))
-
 
 ; TODO: add lsp-mode and rust support
 ; https://robert.kra.hn/posts/rust-emacs-setup/
