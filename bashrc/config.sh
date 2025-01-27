@@ -127,10 +127,10 @@ export EDITOR="emacs -nw"
 #### export EDITOR="emacsclient -nw --socket-name=$EMACS_SERVER"
 
 # ssh aliases
-alias plafrim="ssh_key_setup && ssh plafrim"
-alias nwadmin="ssh_key_setup && ssh nwadmin"
-alias dalton="ssh_key_setup && ssh dalton"
-alias pise="ssh_key_setup && ssh pise"
+####alias plafrim="ssh_key_setup && ssh plafrim"
+####alias nwadmin="ssh_key_setup && ssh nwadmin"
+####alias dalton="ssh_key_setup && ssh dalton"
+####alias pise="ssh_key_setup && ssh pise"
 function ssh_key_setup {
 	if [ -z $SSH_AGENT_PID ]; then
 		eval "$(ssh-agent)"
@@ -144,9 +144,9 @@ function myscp {
 	if [ -d $2 ] ; then rec="-r"; fi
 	scp -l 1000 $rec $2 $1
 }
-alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
-alias sendtonwadmin="myscp sartorir@nwadmin:/home_nfs/sartorir"
-alias sendtodalton="myscp rsartori@dalton:/home/rsartori"
+#### alias sendtoplafrim="myscp rsartori@plafrim:/home/rsartori"
+#### alias sendtonwadmin="myscp sartorir@nwadmin:/home_nfs/sartorir"
+#### alias sendtodalton="myscp rsartori@dalton:/home/rsartori"
 
 # avoid mistakes
 TRASH=~/.trash
@@ -283,12 +283,12 @@ alias make="make --no-print-directory"
 
 gccflags="-Wall -Wextra -Werror -fmax-errors=1"
 alias gcc="gcc -std=c99 ${gccflags}"
-alias gpp="g++ -std=c++17 ${gccflags}"
+alias gpp="g++ -std=c++20 ${gccflags}"
 alias gfortran="gfortran -std=gnu ${gccflags}"
 
-clangflags="-Wall -Wextra -Werror -Wfatal-errors"
+clangflags="-Wall -Wextra -Werror -ferror-limit=1"
 alias clang="clang -std=c99 ${clangflags}"
-alias clang++="clang++ -std=c++17 ${clangflags}"
+alias clang++="clang++ -std=c++20 ${CLANG_GCC} ${clangflags}"
 
 # other aliases
 alias net="rm *~ .*~ \#* .\#*"
@@ -296,7 +296,7 @@ alias m="$EDITOR"
 alias c="cd -"
 alias ram="ps a -o cmd=COMMAND,pid=ID,stat=STATE,rss=USED,vsz=ALLOCATED --sort=-vsz | grep '\(^/\)\|\(ps a -o\)\|\(grep\)' -v"
 alias hellothere="echo 'General Kenobi!'"
-alias update="sudo -- sh -c 'apt update && apt list --upgradable && apt -y upgrade && apt -y autoremove'" # apt list -a
+alias update="sudo -- sh -c 'apt update && apt list --upgradable && apt -y full-upgrade && apt -y autoremove'" # apt list -a
 alias mpimonitoring="mpiexec --mca pml_monitoring_enable 1 --mca pml_monitoring_filename comms --mca pml_monitoring_enable_output 3"
 
 # colors for PS1
