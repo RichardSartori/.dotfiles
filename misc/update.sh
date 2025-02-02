@@ -5,7 +5,7 @@ if [ -z "$TRASH" ]; then
 fi
 
 delete() {
-	mv 2>/dev/null --backup=numbered -t "$HOME/.trash" "$1"
+	mv 2>/dev/null --backup=numbered -t "$TRASH" "$1"
 }
 
 LOG_FILE="$PWD/update.log"
