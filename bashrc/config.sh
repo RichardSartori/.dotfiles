@@ -239,14 +239,6 @@ function vgdb {
 }
 
 # less simple functions
-if ! [ -z `which 2>/dev/null discord` ]; then
-	function up-discord {
-		echo "cd ~/Downloads"
-		echo "https://discordapp.com/api/download?platform=linux&format=deb"
-		echo "sudo apt install ./discord*.deb"
-		echo "rm discord*.deb"
-	}
-fi
 if ! [ -z `which 2>/dev/null rustc` ]; then
 	function rust? {
 		if [[ "$1" =~ "crate" ]]
@@ -297,7 +289,7 @@ alias m="$EDITOR"
 alias c="cd -"
 alias ram="ps a -o cmd=COMMAND,pid=ID,stat=STATE,rss=USED,vsz=ALLOCATED --sort=-vsz | grep '\(^/\)\|\(ps a -o\)\|\(grep\)' -v"
 alias hellothere="echo 'General Kenobi!'"
-alias update="sudo -- sh -c 'apt update && apt list --upgradable && apt -y full-upgrade && apt -y autoremove'" # apt list -a
+alias update="$location/../misc/update.sh"
 alias mpimonitoring="mpiexec --mca pml_monitoring_enable 1 --mca pml_monitoring_filename comms --mca pml_monitoring_enable_output 3"
 
 # colors for PS1
