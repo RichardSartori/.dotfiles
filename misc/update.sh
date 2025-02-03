@@ -8,10 +8,13 @@ delete() {
 	mv 2>/dev/null --backup=numbered -t "$TRASH" "$1"
 }
 
-LOG_FILE="$PWD/update.log"
+LOCAL_DIR=$( dirname -- "${BASH_SOURCE[0]}" )
+LOG_FILE="$LOCAL_DIR/update.log"
 delete "$LOG_FILE"
 
-echo "=== Update Run: $(date) ===" | tee -a "$LOG_FILE"
+echo "=== Update & Upgrade ===" | tee -a "$LOG_FILE"
+echo "date: $(date)" | tee -a "$LOG_FILE"
+echo "log file: $LOG_FILE" | tee -a "$LOG_FILE"
 
 # log and execute a command
 run_command() {
@@ -29,12 +32,12 @@ run_command "sudo -- sh -c 'apt update && apt -y full-upgrade && apt -y autoremo
 
 # 2. Update Python packages
 run_command "python3 -m pip install --upgrade pip"
-REQUIREMENTS="$PWD/requirements.txt"
+REQUIREMENTS="$LOCAL_DIR/requirements.txt"
 run_command "pip list --outdated --format=columns | awk 'NR>2 {print $1}' > $REQUIREMENTS"
 if [ ! -e "$REQUIREMENTS" ]; then
 	run_command "cat $REQUIREMENTS | xargs -n1 pip install --upgrade"
 fi
-rm -f "$REQUIREMENTS"
+delete "$REQUIREMENTS"
 
 # 3. Update Emacs packages
 run_command "emacs --batch --eval '(progn (load-file \"~/.emacs\") (upgrade-packages))'"
@@ -63,7 +66,7 @@ if [ "$INSTALLED_VERSION" == "$LATEST_VERSION" ]; then
 else
 	run_command "wget --no-verbose -O $DISCORD_DEB $DISCORD_URL"
 	run_command "sudo apt install -y $DISCORD_DEB"
-	rm -f "$DISCORD_DEB"
+	delete "$DISCORD_DEB"
 fi
 
 #TODO: add weekly reminder and mute KDE Discover notifications
