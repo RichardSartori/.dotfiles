@@ -1,14 +1,11 @@
 #!/bin/bash
 
-if [ -z "$TRASH" ]; then
-	TRASH="$HOME"
-fi
-
+TRASH="$HOME/.trash"
 delete() {
 	mv 2>/dev/null --backup=numbered -t "$TRASH" "$1"
 }
 
-LOCAL_DIR=$( dirname -- "${BASH_SOURCE[0]}" )
+LOCAL_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 LOG_FILE="$LOCAL_DIR/update.log"
 delete "$LOG_FILE"
 
@@ -55,11 +52,11 @@ run_command "rustup update"
 
 # 6. Update Discord
 DISCORD_URL="https://discord.com/api/download/stable?platform=linux&format=deb"
-DISCORD_DEB="$PWD/discord.deb"
+DISCORD_DEB="$LOCAL_DIR/discord.deb"
 INSTALLED_VERSION=$(dpkg-query -W -f='${Version}\n' discord)
 LATEST_VERSION=$(curl -sI "$DISCORD_URL" | grep -oP "discord-([0-9\.]+)\.deb" | grep -oP "[0-9\.]+[0-9]")
 if [ -z "$LATEST_VERSION" ]; then
-	echo "Could not determine the latest Discord version." | tee -a "$LOG_FILE"
+	run_command "Could not determine the latest Discord version | false"
 fi
 if [ "$INSTALLED_VERSION" == "$LATEST_VERSION" ]; then
 	echo "Discord is already up to date" | tee -a "$LOG_FILE"
