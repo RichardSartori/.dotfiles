@@ -1,10 +1,4 @@
-; TODO: check if required
 (package-initialize)
-
-;; fast startup
-; (custom-set-variables '(package-quickstart t))
-; TODO: check if 1. it broke anything 2. it is faster
-; TODO: add (package-quickstart-refresh) after a package update
 
 ;; MELPA
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -16,8 +10,9 @@
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
-(global-display-line-numbers-mode)
 (setq column-number-mode t)
+(when (version<= "26.0.50" emacs-version)
+	(global-display-line-numbers-mode))
 
 ;; visible cursor
 (blink-cursor-mode 0)
