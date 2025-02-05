@@ -37,7 +37,7 @@ fi
 delete "$REQUIREMENTS"
 
 # 3. Update Emacs packages
-run_command "emacs --batch --eval '(progn (load-file \"~/.emacs\") (upgrade-packages))'"
+run_command "emacs --batch --eval '(progn (load-file \"~/.emacs\") (update-packages))'"
 
 # 4. Update Rust installation
 run_command "rustup update"

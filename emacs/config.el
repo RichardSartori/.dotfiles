@@ -100,16 +100,19 @@
 ;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
 ;(global-set-key (kbd "C-3") 'split-window-right) FIXME: does not work
 
-(defun upgrade-packages ()
-	"Upgrade all installed Emacs packages."
+(defun update-packages ()
+	"Update and upgrade all installed Emacs packages"
 	(interactive)
 	(require 'package)
 	(package-initialize)
 	(package-refresh-contents)
 	(dolist (pkg package-alist)
-		(let ((name (car pkg)))
-			(when (package-installed-p name)
-				(package-reinstall name)))))
+		(let* ((name (car pkg))
+			(installed (package-desc-version (cadr pkg)))
+			(available (when (assoc name package-archive-contents)
+				(package-desc-version (cadr (assoc name package-archive-contents))))))
+			(when (and available (version-list-< installed available)
+				(package-reinstall name))))))
 ;; fallback method: `M-x list-packages RET` `S-u` `y` `x` `q`
 
 ;; ============================================ ;;
