@@ -82,6 +82,7 @@
 (define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
 (global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
 (global-set-key (kbd "C-s") 'save-buffer); save
+(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
 
 ; TODO: other bindings
 ; TODO: try to keep usual OS bindings
