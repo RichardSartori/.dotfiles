@@ -19,7 +19,7 @@ In the following, replace $WHERE with where you cloned the repo (in my case ~/.d
 To use the .bashrc I use at home
 ```bash
 ln -s ~/.dotfiles/bashrc/config.sh ~/.bashrc
-ln -s ~/.dotfiles/hosts/home.sh ~/.dotfiles/bashrc/host
+ln -s ~/.dotfiles/hosts/richard-pc-perso.sh ~/.dotfiles/bashrc/host
 ```
 
 To use my emacs configuration
@@ -29,13 +29,13 @@ ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 
 # TODOs
 1. complete emacs/config.el (see TODOs inside)
-    * https://www.reddit.com/r/emacs/comments/8apn20
-    * https://github.com/darkstego/wakib-keys
-    * https://robert.kra.hn/posts/rust-emacs-setup/
-2. complete bashrc/config.sh EDITOR export (see TODOs inside)
-    * https://wikemacs.org/wiki/Emacs_server
-3. create a script/function to update everything (see misc/update.md)
-    * apt
-    * rustup
-    * emacs
-    * pip
+    * remap C-c and C-x: [method 1](https://www.reddit.com/r/emacs/comments/8apn20) or [method 2](https://github.com/darkstego/wakib-keys)
+    * complete rust setup: [link](https://robert.kra.hn/posts/rust-emacs-setup/)
+2. update misc/update.sh to handle upgrading rust-analyzer (if cloned from repo)
+
+# Acknowledgements
+
+- [Tsoding](https://github.com/tsoding) for his [dotfiles](https://github.com/rexim/dotfiles) and everything else
+- [Kelvin Smith](https://github.com/oneKelvinSmith) for [monokai-emacs](https://github.com/oneKelvinSmith/monokai-emacs/blob/master/monokai-theme.el)
+- The [LLVM team](https://github.com/orgs/llvm/people) for [llvm-mode](https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el)
+- [Andrea Cardaci](https://cardaci.xyz/) for his [gdb-dashboard](https://github.com/cyrus-and/gdb-dashboard)
