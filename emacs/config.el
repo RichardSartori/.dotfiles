@@ -28,6 +28,7 @@
 ;; my preferences
 (defconst my-max-column 80)
 (defconst my-tab-width 4)
+(defconst highlight-color "#00FF00")
 (setq-default fill-column my-max-column)
 (setq-default tab-width my-tab-width)
 (setq-default tab-stop-list nil)
@@ -40,6 +41,21 @@
 	(when (derived-mode-p 'python-mode)
 		(setq python-indent my-tab-width)
 		(setq tab-width my-tab-width))))
+
+;; toggle hide/show code block
+(require 'hideshow)
+(defun hidden-block-appearance (ov)
+	"Custom appearance of hidden blocks"
+	(when (eq 'code (overlay-get ov 'hs))
+		(overlay-put ov 'display
+			(propertize " ••• " 'face `(
+				:foreground ,highlight-color
+				:weight bold)))))
+(add-hook 'prog-mode-hook (lambda ()
+	(hs-minor-mode)
+	(setq hs-set-up-overlay 'hidden-block-appearance)
+	(local-unset-key (kbd "C-M-h"))
+	(local-set-key (kbd "C-M-h") 'hs-toggle-hiding)))
 
 ;; show tabs as gray pipe
 (setq whitespace-display-mappings '((tab-mark 9 [124 9] [92 9])))
@@ -61,7 +77,7 @@
 	(file-name-directory (file-truename load-file-name)))
 
 ;; syntax highlighting for LLVM
-;; https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
+;; https://github.com/llvm/llvm-project/blob/main/llvm/utils/emacs/llvm-mode.el
 (require 'llvm-mode)
 
 ;; sublime-text looking theme
@@ -83,13 +99,21 @@
 (global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
 (global-set-key (kbd "C-s") 'save-buffer); save
 (global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
+(global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
 
-; TODO: other bindings
-; TODO: try to keep usual OS bindings
-; TODO: find alternatives for prefix commands
-; TODO: run (loop (key func) (define-key local-map key func)) in hooks
-; NOTE: use C-h b to show emacs bindings
-; NOTE: use C-h k <keys> to see what function <keys> run
+;; NOTES:
+; use C-h b to show emacs bindings
+; use C-h k <keys> to see what function <keys> run
+; run (loop (key func) (define-key local-map key func)) in hooks
+
+;; TODO: fix bindings:
+; unmap most (prefix) bindings
+; see (setq esc-map (make-sparse-keymap))
+; see (setq ctl-x-map (make-sparse-keymap))
+; add only the bindings I use
+; try to keep usual OS bindings (ie. C-c = copy, ...)
+
+;; TODO: map these bindings:
 ;(global-set-key (kbd "C-c") 'kill-ring-save); copy FIXME: C-c is prefix
 ;(global-set-key (kbd "C-x") 'kill-region); cut FIXME: C-x is prefix
 ;(global-set-key (kbd "<C-TAB>") '<C-x o>) FIXME: how to map <C-TAB> to <C-x o>
@@ -101,6 +125,13 @@
 ;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
 ;(global-set-key (kbd "C-3") 'split-window-right) FIXME: does not work
 
+;; TODO: find better bindings for:
+;(global-set-key (kbd "C-M-<down>") #'down-list); move down a code block
+;(global-set-key (kbd "C-M-<up>") #'backward-up-list); move up a code block
+;(global-set-key (kbd "C-M-<right>") #'down-list); move down a code block
+;(global-set-key (kbd "C-M-<left>") #'backward-up-list); move up a code block
+
+;; update installed packages
 (defun update-packages ()
 	"Update and upgrade all installed Emacs packages"
 	(interactive)
@@ -141,10 +172,10 @@
 
 ;; highlight keywords
 (when (require 'hl-todo nil t)
-	(setq hl-todo-keyword-faces '(
-		("TODO"  . "#00FF00")
-		("FIXME" . "#00FF00")
-		("TMP"   . "#00FF00")))
+	(setq hl-todo-keyword-faces `(
+		("TODO"  . ,highlight-color)
+		("FIXME" . ,highlight-color)
+		("TMP"   . ,highlight-color)))
 	(global-hl-todo-mode))
 
 ;; highlight text beyond my-max-column
