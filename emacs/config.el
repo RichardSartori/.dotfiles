@@ -42,21 +42,6 @@
 		(setq python-indent my-tab-width)
 		(setq tab-width my-tab-width))))
 
-;; toggle hide/show code block
-(require 'hideshow)
-(defun hidden-block-appearance (ov)
-	"Custom appearance of hidden blocks"
-	(when (eq 'code (overlay-get ov 'hs))
-		(overlay-put ov 'display
-			(propertize " ••• " 'face `(
-				:foreground ,highlight-color
-				:weight bold)))))
-(add-hook 'prog-mode-hook (lambda ()
-	(hs-minor-mode)
-	(setq hs-set-up-overlay 'hidden-block-appearance)
-	(local-unset-key (kbd "C-M-h"))
-	(local-set-key (kbd "C-M-h") 'hs-toggle-hiding)))
-
 ;; show tabs as gray pipe
 (setq whitespace-display-mappings '((tab-mark 9 [124 9] [92 9])))
 (custom-set-faces '(whitespace-tab ((t (:foreground "#636363")))))
@@ -91,20 +76,25 @@
 ;; C-x f auto-complete
 (ido-mode 1)
 
-;; key bindings
-(global-set-key (kbd "C-v") 'yank); paste
-(global-set-key (kbd "C-f") 'isearch-forward); find
-(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
-(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
-(global-set-key (kbd "C-s") 'save-buffer); save
-(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
-(global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
+;; update installed packages
+; fallback method: `M-x list-packages RET` `S-u` `y` `x` `q`
+(defun update-packages ()
+	"Update and upgrade all installed Emacs packages"
+	(interactive)
+	(require 'package)
+	(package-initialize)
+	(package-refresh-contents)
+	(dolist (pkg package-alist)
+		(let* ((name (car pkg))
+			(installed (package-desc-version (cadr pkg)))
+			(available (when (assoc name package-archive-contents)
+				(package-desc-version (cadr (assoc name package-archive-contents))))))
+			(when (and available (version-list-< installed available)
+				(package-reinstall name))))))
 
-;; NOTES:
-; use C-h b to show emacs bindings
-; use C-h k <keys> to see what function <keys> run
-; run (loop (key func) (define-key local-map key func)) in hooks
+;; ============= ;;
+;; key bindings  ;;
+;; ============= ;;
 
 ;; TODO: fix bindings:
 ; unmap most (prefix) bindings
@@ -112,6 +102,39 @@
 ; see (setq ctl-x-map (make-sparse-keymap))
 ; add only the bindings I use
 ; try to keep usual OS bindings (ie. C-c = copy, ...)
+
+;; NOTES:
+; use C-h b to show emacs bindings
+; use C-h k <keys> to see what function <keys> run
+; run (loop (key func) (define-key local-map key func)) in hooks
+
+;; usual OS bindings, mapped with C-
+(global-set-key (kbd "C-v") 'yank); paste
+(global-set-key (kbd "C-f") 'isearch-forward); find
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(global-set-key (kbd "C-s") 'save-buffer); save
+(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
+(global-set-key (kbd "C-l") 'recenter-top-bottom); put cursor at the middle
+
+;; unusual bindings, mapped with M-
+(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
+(global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
+
+;; toggle hide/show code block
+(require 'hideshow)
+(defun hidden-block-appearance (ov)
+	"Custom appearance of hidden blocks"
+	(when (eq 'code (overlay-get ov 'hs))
+		(overlay-put ov 'display
+			(propertize " ••• " 'face `(
+				:foreground ,highlight-color
+				:weight bold)))))
+(add-hook 'prog-mode-hook (lambda ()
+	(hs-minor-mode)
+	(setq hs-set-up-overlay 'hidden-block-appearance)
+	(local-unset-key (kbd "C-M-h"))
+	(local-set-key (kbd "C-M-h") 'hs-toggle-hiding)))
 
 ;; TODO: map these bindings:
 ;(global-set-key (kbd "C-c") 'kill-ring-save); copy FIXME: C-c is prefix
@@ -130,22 +153,6 @@
 ;(global-set-key (kbd "C-M-<up>") #'backward-up-list); move up a code block
 ;(global-set-key (kbd "C-M-<right>") #'down-list); move down a code block
 ;(global-set-key (kbd "C-M-<left>") #'backward-up-list); move up a code block
-
-;; update installed packages
-(defun update-packages ()
-	"Update and upgrade all installed Emacs packages"
-	(interactive)
-	(require 'package)
-	(package-initialize)
-	(package-refresh-contents)
-	(dolist (pkg package-alist)
-		(let* ((name (car pkg))
-			(installed (package-desc-version (cadr pkg)))
-			(available (when (assoc name package-archive-contents)
-				(package-desc-version (cadr (assoc name package-archive-contents))))))
-			(when (and available (version-list-< installed available)
-				(package-reinstall name))))))
-;; fallback method: `M-x list-packages RET` `S-u` `y` `x` `q`
 
 ;; ============================================ ;;
 ;; commands below require non built-in packages ;;
