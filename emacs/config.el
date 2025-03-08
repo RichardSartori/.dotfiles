@@ -33,6 +33,7 @@
 (setq-default tab-width my-tab-width)
 (setq-default tab-stop-list nil)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; preferences set in every buffer
 (add-hook 'after-change-major-mode-hook (lambda ()
@@ -107,6 +108,9 @@
 ; use C-h b to show emacs bindings
 ; use C-h k <keys> to see what function <keys> run
 ; run (loop (key func) (define-key local-map key func)) in hooks
+; (electric-indent-mode nil) *activates* the minor mode
+; see /usr/share/emacs/{VERSION}/lisp for bindings/functions
+; see https://robert.kra.hn/posts/rust-emacs-setup/
 
 ;; usual OS bindings, mapped with C-
 (global-set-key (kbd "C-v") 'yank); paste
@@ -115,11 +119,30 @@
 (define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
 (global-set-key (kbd "C-s") 'save-buffer); save
 (global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
-(global-set-key (kbd "C-l") 'recenter-top-bottom); put cursor at the middle
 
 ;; unusual bindings, mapped with M-
-(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
 (global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
+(global-set-key (kbd "M-m") 'recenter-top-bottom); put cursor at the middle
+(global-set-key (kbd "M-f") 'fill-paragraph); add newlines before my-max-column
+(global-set-key (kbd "M-q") 'keyboard-quit); cancel operation
+(global-set-key (kbd "M-v") 'view-mode); set buffer read-onlyw
+(global-set-key (kbd "M-s") 'suspend-emacs); bring back to the terminal
+
+;; sync kill-ring with clipboard
+(defun copy-to-clipboard (begin end)
+	(interactive "r")
+	(if (region-active-p)
+		(progn
+			(call-process-region begin end
+				"xclip" nil nil nil "-selection" "clipboard" "-i")
+			(message "Copied to clipboard")
+			(deactivate-mark))
+	(message "No region selected")))
+(defun paste-from-clipboard ()
+	(interactive)
+	(insert (shell-command-to-string "xclip -selection clipboard -o")))
+(global-set-key (kbd "M-w") 'copy-to-clipboard)
+(global-set-key (kbd "C-y") 'paste-from-clipboard)
 
 ;; toggle hide/show code block
 (require 'hideshow)
@@ -165,10 +188,55 @@
 ;; syntax highlighting for Rust
 (require 'rust-mode nil t)
 
-;; general auto-completion
-(when (require 'auto-complete nil t)
-	(ac-config-default)
-	(add-to-list 'ac-modes 'rust-mode))
+;;; general auto-completion
+;(when (require 'auto-complete nil t)
+;	(ac-config-default)
+;	(add-to-list 'ac-modes 'rust-mode))
+; TODO: add autocompletion for every mode that is neither C,C++,Rust,Python
+
+;; language server protocol (LSP)
+(when (and (require 'lsp-mode nil t) (require 'company nil t))
+	(setq
+		lsp-enable-snippet nil
+		lsp-prefer-capf t ; completions at point
+		lsp-diagnostics-provider :none ; disable on-the-fly error checks
+		lsp-auto-guess-root t
+		lsp-restart 'ignore ; don't prompt
+		lsp-enable-file-watchers nil ; performance
+		lsp-format-on-save nil
+		lsp-before-save-edits nil
+		lsp-enable-indentation nil
+		lsp-enable-formatting nil
+		lsp-apply-edits nil ; don't even think about touching my code
+		lsp-completion-item-limit 5
+		lsp-enable-on-type-formatting nil
+		lsp-enable-text-document-sync t
+		lsp-signature-auto-activate t
+		lsp-completion-enable-additional-text-edit nil
+		company-auto-expand nil
+		company-auto-complete nil
+		company-auto-complete-chars nil
+		company-auto-commit nil
+		company-auto-commit-chars nil
+		company-backends '((company-lsp)))
+	(global-company-mode)
+	(dolist (hook '(c-mode-hook c++-mode-hook rust-mode-hook python-mode-hook))
+		(add-hook hook #'lsp))
+	;(global-set-key (kbd "<tab>") #'company-indent-or-complete-common)
+	;(define-key company-active-map (kbd "TAB") #'company-complete)
+	(define-key company-active-map (kbd "TAB") #'company-complete-selection)
+	(define-key company-active-map (kbd "RET") nil)
+	;(with-eval-after-load 'lsp-mode (setq lsp-client-settings '(
+	;	:textDocument/formatting nil
+	;	:textDocument/rangeFormatting nil
+	;	:textDocument/onTypeFormatting nil
+	;	:textDocument/documentHighlight nil)))
+)
+
+;; TODO:
+; check for all the options: what they do, are they required
+; limit completions, strict matching, make TAB work
+; add lsp-ui?
 
 ;; multiple cursors
 (when (require 'multiple-cursors nil t)
@@ -202,7 +270,3 @@
 (when (require 'stickyfunc-enhance nil t)
 	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 	(semantic-mode 1))
-
-; TODO: add lsp-mode and rust support
-; https://robert.kra.hn/posts/rust-emacs-setup/
-; add documentation for gnu-elpa-keyring-update and lsp-mode
