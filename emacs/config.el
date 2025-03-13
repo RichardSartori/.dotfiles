@@ -138,10 +138,17 @@
 			(message "Copied to clipboard")
 			(deactivate-mark))
 	(message "No region selected")))
+(defun cut-to-clipboard (begin end)
+	(interactive "r")
+	(if (region-active-p)
+		(progn
+			(copy-to-clipboard begin end)
+			(kill-region begin end))))
 (defun paste-from-clipboard ()
 	(interactive)
 	(insert (shell-command-to-string "xclip -selection clipboard -o")))
 (global-set-key (kbd "M-w") 'copy-to-clipboard)
+(global-set-key (kbd "C-w") 'cut-to-clipboard)
 (global-set-key (kbd "C-y") 'paste-from-clipboard)
 
 ;; toggle hide/show code block
@@ -188,13 +195,9 @@
 ;; syntax highlighting for Rust
 (require 'rust-mode nil t)
 
-;;; general auto-completion
-;(when (require 'auto-complete nil t)
-;	(ac-config-default)
-;	(add-to-list 'ac-modes 'rust-mode))
-; TODO: add autocompletion for every mode that is neither C,C++,Rust,Python
-
 ;; language server protocol (LSP)
+(defconst lsp-modes
+	(list 'c-mode-hook 'c++-mode-hook 'rust-mode-hook 'python-mode-hook))
 (when (and (require 'lsp-mode nil t) (require 'company nil t))
 	(setq
 		lsp-enable-snippet nil
@@ -220,7 +223,7 @@
 		company-auto-commit-chars nil
 		company-backends '((company-lsp)))
 	(global-company-mode)
-	(dolist (hook '(c-mode-hook c++-mode-hook rust-mode-hook python-mode-hook))
+	(dolist (hook lsp-modes)
 		(add-hook hook #'lsp))
 	;(global-set-key (kbd "<tab>") #'company-indent-or-complete-common)
 	;(define-key company-active-map (kbd "TAB") #'company-complete)
@@ -237,6 +240,13 @@
 ; check for all the options: what they do, are they required
 ; limit completions, strict matching, make TAB work
 ; add lsp-ui?
+
+;; general auto-completion
+(when (require 'auto-complete nil t)
+	(ac-config-default)
+	(dolist (hook lsp-modes)
+		(add-hook hook (lambda ()
+			(auto-complete-mode -1)))))
 
 ;; multiple cursors
 (when (require 'multiple-cursors nil t)
