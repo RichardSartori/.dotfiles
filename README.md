@@ -29,13 +29,12 @@ ln -s ~/.dotfiles/emacs/config.el ~/.emacs
 
 # TODOs
 1. complete emacs/config.el (see TODOs inside)
-    * remap C-c and C-x: [method 1](https://www.reddit.com/r/emacs/comments/8apn20) or [method 2](https://github.com/darkstego/wakib-keys)
-    * complete rust setup: [link](https://robert.kra.hn/posts/rust-emacs-setup/)
 2. update misc/update.sh to handle upgrading rust-analyzer (if cloned from repo)
 
 # Acknowledgements
 
-- [Tsoding](https://github.com/tsoding) for his [dotfiles](https://github.com/rexim/dotfiles) and everything else
+- [Tsoding](https://github.com/tsoding) for [dotfiles](https://github.com/rexim/dotfiles) and everything else
 - [Kelvin Smith](https://github.com/oneKelvinSmith) for [monokai-emacs](https://github.com/oneKelvinSmith/monokai-emacs/blob/master/monokai-theme.el)
 - The [LLVM team](https://github.com/orgs/llvm/people) for [llvm-mode](https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el)
-- [Andrea Cardaci](https://cardaci.xyz/) for his [gdb-dashboard](https://github.com/cyrus-and/gdb-dashboard)
+- [darkstego](https://github.com/darkstego) for [rebinder.el](https://github.com/darkstego/rebinder.el)
+- [Andrea Cardaci](https://cardaci.xyz/) for [gdb-dashboard](https://github.com/cyrus-and/gdb-dashboard)

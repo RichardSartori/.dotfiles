@@ -93,42 +93,7 @@
 			(when (and available (version-list-< installed available)
 				(package-reinstall name))))))
 
-;; ============= ;;
-;; key bindings  ;;
-;; ============= ;;
-
-;; TODO: fix bindings:
-; unmap most (prefix) bindings
-; see (setq esc-map (make-sparse-keymap))
-; see (setq ctl-x-map (make-sparse-keymap))
-; add only the bindings I use
-; try to keep usual OS bindings (ie. C-c = copy, ...)
-
-;; NOTES:
-; use C-h b to show emacs bindings
-; use C-h k <keys> to see what function <keys> run
-; run (loop (key func) (define-key local-map key func)) in hooks
-; (electric-indent-mode nil) *activates* the minor mode
-; see /usr/share/emacs/{VERSION}/lisp for bindings/functions
-; see https://robert.kra.hn/posts/rust-emacs-setup/
-
-;; usual OS bindings, mapped with C-
-(global-set-key (kbd "C-v") 'yank); paste
-(global-set-key (kbd "C-f") 'isearch-forward); find
-(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
-(global-set-key (kbd "C-s") 'save-buffer); save
-(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
-
-;; unusual bindings, mapped with M-
-(global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
-(global-set-key (kbd "M-m") 'recenter-top-bottom); put cursor at the middle
-(global-set-key (kbd "M-f") 'fill-paragraph); add newlines before my-max-column
-(global-set-key (kbd "M-q") 'keyboard-quit); cancel operation
-(global-set-key (kbd "M-v") 'view-mode); set buffer read-onlyw
-(global-set-key (kbd "M-s") 'suspend-emacs); bring back to the terminal
-
-;; sync kill-ring with clipboard
+;; helper functions to sync kill-ring with clipboard
 (defun copy-to-clipboard (begin end)
 	(interactive "r")
 	(if (region-active-p)
@@ -140,16 +105,47 @@
 	(message "No region selected")))
 (defun cut-to-clipboard (begin end)
 	(interactive "r")
-	(if (region-active-p)
-		(progn
-			(copy-to-clipboard begin end)
-			(kill-region begin end))))
+	(copy-to-clipboard begin end)
+	(kill-region begin end))
 (defun paste-from-clipboard ()
 	(interactive)
 	(insert (shell-command-to-string "xclip -selection clipboard -o")))
-(global-set-key (kbd "M-w") 'copy-to-clipboard)
-(global-set-key (kbd "C-w") 'cut-to-clipboard)
-(global-set-key (kbd "C-y") 'paste-from-clipboard)
+
+;; ============= ;;
+;; key bindings  ;;
+;; ============= ;;
+
+;; NOTES:
+; use C-h b to show emacs bindings
+; use C-h k <keys> to see which function is bind to <keys>
+
+;; rebind prefix keys C-c and C-x
+;; https://github.com/darkstego/rebinder.el/blob/master/rebinder.el
+(require 'rebinder)
+(define-key global-map (kbd "C-c") (rebinder-dynamic-binding "C-c"))
+(define-key rebinder-mode-map (kbd "C-c") 'copy-to-clipboard)
+; FIXME: remap "C-x o" to something else before uncommenting the following
+;(define-key global-map (kbd "C-x") (rebinder-dynamic-binding "C-x"))
+;(define-key rebinder-mode-map (kbd "C-x") 'cut-to-clipboard)
+(rebinder-hook-to-mode 't 'after-change-major-mode-hook)
+
+;; usual OS bindings, mapped with C-
+(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
+(global-set-key (kbd "C-f") 'isearch-forward); find
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(global-set-key (kbd "C-q") 'save-buffers-kill-terminal); quit
+(global-set-key (kbd "C-s") 'save-buffer); save
+(global-set-key (kbd "C-v") 'paste-from-clipboard); paste
+;(global-set-key (kbd "C-<tab>") 'other-window); go to next buffer in cycle
+
+;; unusual bindings, mapped with M-
+(global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
+(global-set-key (kbd "M-f") 'fill-paragraph); add newlines before my-max-column
+(global-set-key (kbd "M-m") 'recenter-top-bottom); put cursor at the middle
+(global-set-key (kbd "M-q") 'keyboard-escape-quit); cancel operation
+(global-set-key (kbd "M-s") 'suspend-emacs); bring back to the terminal
+(global-set-key (kbd "M-v") 'view-mode); set buffer read-only
 
 ;; toggle hide/show code block
 (require 'hideshow)
@@ -163,16 +159,13 @@
 (add-hook 'prog-mode-hook (lambda ()
 	(hs-minor-mode)
 	(setq hs-set-up-overlay 'hidden-block-appearance)
-	(local-unset-key (kbd "C-M-h"))
-	(local-set-key (kbd "C-M-h") 'hs-toggle-hiding)))
+	(local-unset-key (kbd "M-h"))
+	(local-set-key (kbd "M-h") 'hs-toggle-hiding)))
 
 ;; TODO: map these bindings:
-;(global-set-key (kbd "C-c") 'kill-ring-save); copy FIXME: C-c is prefix
-;(global-set-key (kbd "C-x") 'kill-region); cut FIXME: C-x is prefix
-;(global-set-key (kbd "<C-TAB>") '<C-x o>) FIXME: how to map <C-TAB> to <C-x o>
+;(global-set-key (kbd "C-<tab>") 'other-window) FIXME: C-<tab> is <tab>
 ;(global-set-key (kbd "C-z") 'undo) FIXME: C-z bring back to the terminal
 ;(global-set-key (kbd "C-y") 'redo) FIXME: 'redo is not a function
-;(global-set-key (kbd "C-w") 'save-buffers-kill-terminal); quit FIXME: is cut
 ;(global-set-key (kbd "C-0") 'delete-window) FIXME: does not work
 ;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: does not work
 ;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
