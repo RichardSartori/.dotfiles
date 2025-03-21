@@ -74,7 +74,7 @@
 (setq backup-directory-alist '(("." . "~/.trash")))
 (setq backup-by-copying t)
 
-;; C-x f auto-complete
+;; 'ido-find-file auto-complete
 (ido-mode 1)
 
 ;; update installed packages
@@ -134,6 +134,7 @@
 (global-set-key (kbd "C-f") 'isearch-forward); find
 (define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(global-set-key (kbd "C-o") 'ido-find-file); open file
 (global-set-key (kbd "C-q") 'save-buffers-kill-terminal); quit
 (global-set-key (kbd "C-s") 'save-buffer); save
 (global-set-key (kbd "C-v") 'paste-from-clipboard); paste
@@ -187,6 +188,11 @@
 
 ;; syntax highlighting for Rust
 (require 'rust-mode nil t)
+
+;; undo-redo
+(when (require 'undo-fu nil t)
+	(global-set-key (kbd "C-z") 'undo-fu-only-undo)
+	(global-set-key (kbd "C-y") 'undo-fu-only-redo))
 
 ;; language server protocol (LSP)
 (defconst lsp-modes
@@ -246,7 +252,8 @@
 	(global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
 	(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
 	(global-set-key (kbd "<M-right>") 'mc/mark-next-like-this)
-	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this))
+	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this)
+	(define-key mc/keymap (kbd "M-q") 'mc/keyboard-quit))
 
 ;; highlight keywords
 (when (require 'hl-todo nil t)
