@@ -138,7 +138,8 @@
 (global-set-key (kbd "C-q") 'save-buffers-kill-terminal); quit
 (global-set-key (kbd "C-s") 'save-buffer); save
 (global-set-key (kbd "C-v") 'paste-from-clipboard); paste
-;(global-set-key (kbd "C-<tab>") 'other-window); go to next buffer in cycle
+; FIXME: use C-<tab> instead of S-<tab>
+(global-set-key (kbd "<backtab>") 'other-window); go to next buffer in cycle
 
 ;; unusual bindings, mapped with M-
 (global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
@@ -164,13 +165,10 @@
 	(local-set-key (kbd "M-h") 'hs-toggle-hiding)))
 
 ;; TODO: map these bindings:
-;(global-set-key (kbd "C-<tab>") 'other-window) FIXME: C-<tab> is <tab>
-;(global-set-key (kbd "C-z") 'undo) FIXME: C-z bring back to the terminal
-;(global-set-key (kbd "C-y") 'redo) FIXME: 'redo is not a function
-;(global-set-key (kbd "C-0") 'delete-window) FIXME: does not work
-;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: does not work
-;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
-;(global-set-key (kbd "C-3") 'split-window-right) FIXME: does not work
+;(global-set-key (kbd "C-0") 'delete-window) FIXME: is 0
+;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: is 1
+;(global-set-key (kbd "C-2") 'split-window-below) FIXME: is 2
+;(global-set-key (kbd "C-3") 'split-window-right) FIXME: is 3
 
 ;; TODO: find better bindings for:
 ;(global-set-key (kbd "C-M-<down>") #'down-list); move down a code block
@@ -195,6 +193,7 @@
 	(global-set-key (kbd "C-y") 'undo-fu-only-redo))
 
 ;; language server protocol (LSP)
+; TODO: add lsp-ui?
 (defconst lsp-modes
 	(list 'c-mode-hook 'c++-mode-hook 'rust-mode-hook 'python-mode-hook))
 (when (and (require 'lsp-mode nil t) (require 'company nil t))
@@ -224,21 +223,8 @@
 	(global-company-mode)
 	(dolist (hook lsp-modes)
 		(add-hook hook #'lsp))
-	;(global-set-key (kbd "<tab>") #'company-indent-or-complete-common)
-	;(define-key company-active-map (kbd "TAB") #'company-complete)
 	(define-key company-active-map (kbd "TAB") #'company-complete-selection)
-	(define-key company-active-map (kbd "RET") nil)
-	;(with-eval-after-load 'lsp-mode (setq lsp-client-settings '(
-	;	:textDocument/formatting nil
-	;	:textDocument/rangeFormatting nil
-	;	:textDocument/onTypeFormatting nil
-	;	:textDocument/documentHighlight nil)))
-)
-
-;; TODO:
-; check for all the options: what they do, are they required
-; limit completions, strict matching, make TAB work
-; add lsp-ui?
+	(define-key company-active-map (kbd "RET") nil))
 
 ;; general auto-completion
 (when (require 'auto-complete nil t)
