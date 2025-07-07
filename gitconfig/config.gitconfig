@@ -7,6 +7,8 @@
 	hsup = pull
 	hist = log --follow -p --
 	fix = pull --no-ff
+[advice]
+	statusHints = off
 [color]
 	ui = auto
 [color "diff"]
