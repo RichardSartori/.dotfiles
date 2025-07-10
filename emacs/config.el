@@ -19,8 +19,9 @@
 (setq visible-cursor nil)
 (global-hl-line-mode)
 
-;; show matching parenthesis
+;; show/insert matching parenthesis/bracket
 (show-paren-mode 1)
+(electric-pair-mode 1)
 
 ;; automatic reload when file changed on disk
 (global-auto-revert-mode)
@@ -34,11 +35,13 @@
 (setq-default tab-stop-list nil)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
 (fset 'yes-or-no-p 'y-or-n-p)
+(add-hook 'before-save-hook (lambda () (setq require-final-newline nil)))
 
 ;; preferences set in every buffer
 (add-hook 'after-change-major-mode-hook (lambda ()
 	(setq indent-tabs-mode t)
 	(setq electric-indent-mode nil)
+	(local-set-key (kbd "<backtab>") 'other-window)
 	(when (derived-mode-p 'python-mode)
 		(setq python-indent my-tab-width)
 		(setq tab-width my-tab-width))))
@@ -101,8 +104,9 @@
 			(call-process-region begin end
 				"xclip" nil nil nil "-selection" "clipboard" "-i")
 			(message "Copied to clipboard")
-			(deactivate-mark))
-	(message "No region selected")))
+			(deactivate-mark)
+		)
+		(message "No region selected")))
 (defun cut-to-clipboard (begin end)
 	(interactive "r")
 	(copy-to-clipboard begin end)
@@ -111,43 +115,108 @@
 	(interactive)
 	(insert (shell-command-to-string "xclip -selection clipboard -o")))
 
+;; ibuffer configuration
+(require 'ibuffer)
+(define-ibuffer-sorter my-ibuffer-sort
+	"Sort buffers by major mode and name, putting low priority modes at the end"
+	(:description "custom ibuffer sorting method")
+	(let (
+		(mode-a (buffer-local-value 'major-mode (car a)))
+		(mode-b (buffer-local-value 'major-mode (car b)))
+		(name-a (buffer-name (car a)))
+		(name-b (buffer-name (car b)))
+		(low-priority-modes '(
+			fundamental-mode
+			messages-buffer-mode
+			lisp-interaction-mode
+			special-mode)))
+	(cond
+		;; handle low priority modes
+		((and
+			(memq mode-a low-priority-modes)
+			(not (memq mode-b low-priority-modes)))
+			nil)
+		((and
+			(not (memq mode-a low-priority-modes))
+			(memq mode-b low-priority-modes))
+			t)
+		;; same mode, sort by name
+		((eq mode-a mode-b) (string-lessp name-a name-b))
+		;; sort by mode
+		(t (string-lessp (symbol-name mode-a) (symbol-name mode-b))))))
+(add-hook 'ibuffer-mode-hook (lambda () (ibuffer-do-sort-by-my-ibuffer-sort)))
+(defun ibuffer-kill-buffer ()
+	"Kill the buffer at point"
+	(interactive)
+	(kill-buffer (ibuffer-current-buffer))
+	(ibuffer-update nil t))
+(define-key ibuffer-mode-map (kbd "k") 'ibuffer-kill-buffer)
+(setq ibuffer-formats
+	'((mark modified read-only locked " "
+		(name 40 40 :left :elide) ; wider name column
+		" "
+		(size 9 -1 :right)
+		" "
+		(mode 16 16 :left :elide)
+		" "
+		filename-and-process)))
+
 ;; ============= ;;
 ;; key bindings  ;;
 ;; ============= ;;
 
 ;; NOTES:
-; use C-h b to show emacs bindings
-; use C-h k <keys> to see which function is bind to <keys>
+; "C-h b" = (describe-bindings)
+; "C-h k" <key> = (describe-key <key>)
 
 ;; rebind prefix keys C-c and C-x
 ;; https://github.com/darkstego/rebinder.el/blob/master/rebinder.el
 (require 'rebinder)
 (define-key global-map (kbd "C-c") (rebinder-dynamic-binding "C-c"))
 (define-key rebinder-mode-map (kbd "C-c") 'copy-to-clipboard)
-; FIXME: remap "C-x o" to something else before uncommenting the following
-;(define-key global-map (kbd "C-x") (rebinder-dynamic-binding "C-x"))
-;(define-key rebinder-mode-map (kbd "C-x") 'cut-to-clipboard)
+(define-key global-map (kbd "C-x") (rebinder-dynamic-binding "C-x"))
+(define-key rebinder-mode-map (kbd "C-x") 'cut-to-clipboard)
 (rebinder-hook-to-mode 't 'after-change-major-mode-hook)
 
 ;; usual OS bindings, mapped with C-
 (global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
+(global-set-key (kbd "C-b") 'ibuffer); open menu
+; "C-c" is "copy-to-clipboard"
 (global-set-key (kbd "C-f") 'isearch-forward); find
-(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+; "C-g" is "keyboard-quit"
+; "C-i" is "<TAB>"
+; "C-m" is "<RET>"
 (global-set-key (kbd "C-o") 'ido-find-file); open file
-(global-set-key (kbd "C-q") 'save-buffers-kill-terminal); quit
+(global-set-key (kbd "C-q") 'keyboard-escape-quit); cancel operation
 (global-set-key (kbd "C-s") 'save-buffer); save
 (global-set-key (kbd "C-v") 'paste-from-clipboard); paste
-; FIXME: use C-<tab> instead of S-<tab>
-(global-set-key (kbd "<backtab>") 'other-window); go to next buffer in cycle
+(global-set-key (kbd "C-w") 'delete-window); delete buffer at point
+; "C-x" is "cut-to-clipboard"
+; "C-y" is "redo"
+; "C-z" is "undo"
+; FIXME: map "C-<tab>" to 'other-window (go to next buffer in cycle)
+; currently mapped to "S-<tab>"/"<backtab>"
+
+;; usual binding within find/search mode
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "C-v") (lambda () (interactive)
+	(isearch-yank-string (shell-command-to-string "xclip -selection clipboard -o"))))
 
 ;; unusual bindings, mapped with M-
 (global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
+; "M-d" is "lsp-find-definition"
 (global-set-key (kbd "M-f") 'fill-paragraph); add newlines before my-max-column
+; "M-h" is "hs-toggle-hiding"
+(global-set-key (kbd "M-i") 'delete-other-windows); IJKL window management
+(global-set-key (kbd "M-j") 'delete-window); IJKL window management
+(global-set-key (kbd "M-k") 'split-window-below); IJKL window management
+(global-set-key (kbd "M-l") 'split-window-right); IJKL window management
 (global-set-key (kbd "M-m") 'recenter-top-bottom); put cursor at the middle
-(global-set-key (kbd "M-q") 'keyboard-escape-quit); cancel operation
-(global-set-key (kbd "M-s") 'suspend-emacs); bring back to the terminal
+(global-set-key (kbd "M-q") 'save-buffers-kill-terminal); quit
+(global-set-key (kbd "M-s") 'suspend-frame); bring back to the terminal
 (global-set-key (kbd "M-v") 'view-mode); set buffer read-only
+; "M-x" is "smex"
 
 ;; toggle hide/show code block
 (require 'hideshow)
@@ -163,12 +232,6 @@
 	(setq hs-set-up-overlay 'hidden-block-appearance)
 	(local-unset-key (kbd "M-h"))
 	(local-set-key (kbd "M-h") 'hs-toggle-hiding)))
-
-;; TODO: map these bindings:
-;(global-set-key (kbd "C-0") 'delete-window) FIXME: is 0
-;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: is 1
-;(global-set-key (kbd "C-2") 'split-window-below) FIXME: is 2
-;(global-set-key (kbd "C-3") 'split-window-right) FIXME: is 3
 
 ;; TODO: find better bindings for:
 ;(global-set-key (kbd "C-M-<down>") #'down-list); move down a code block
@@ -193,7 +256,9 @@
 	(global-set-key (kbd "C-y") 'undo-fu-only-redo))
 
 ;; language server protocol (LSP)
-; TODO: add lsp-ui?
+; sudo apt install clangd
+; rustup component add rust-analyzer
+; pip install "python-lsp-server[all]"
 (defconst lsp-modes
 	(list 'c-mode-hook 'c++-mode-hook 'rust-mode-hook 'python-mode-hook))
 (when (and (require 'lsp-mode nil t) (require 'company nil t))
@@ -214,6 +279,7 @@
 		lsp-enable-text-document-sync t
 		lsp-signature-auto-activate t
 		lsp-completion-enable-additional-text-edit nil
+		byte-compile-warnings '(not docstrings)
 		company-auto-expand nil
 		company-auto-complete nil
 		company-auto-complete-chars nil
@@ -224,7 +290,9 @@
 	(dolist (hook lsp-modes)
 		(add-hook hook #'lsp))
 	(define-key company-active-map (kbd "TAB") #'company-complete-selection)
-	(define-key company-active-map (kbd "RET") nil))
+	(define-key company-active-map (kbd "RET") nil)
+	(define-key company-active-map (kbd "C-s") 'save-buffer)
+	(global-set-key (kbd "M-d") 'lsp-find-definition))
 
 ;; general auto-completion
 (when (require 'auto-complete nil t)
@@ -239,14 +307,22 @@
 	(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
 	(global-set-key (kbd "<M-right>") 'mc/mark-next-like-this)
 	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this)
-	(define-key mc/keymap (kbd "M-q") 'mc/keyboard-quit))
+	(define-key mc/keymap (kbd "M-q") 'mc/keyboard-quit)
+	; FIXME: bind "C-c", "C-v" and "C-x" in mc/keymap
+	;(define-key mc/keymap (kbd "C-v")
+	;	(lambda () (message "use <M-x yank> to paste correctly")))
+	;(define-key mc/keymap (kbd "C-x")
+	;	(lambda () (message "use <C-c> and <DEL>")))
+)
 
 ;; highlight keywords
 (when (require 'hl-todo nil t)
 	(setq hl-todo-keyword-faces `(
 		("TODO"  . ,highlight-color)
+		("todo"  . ,highlight-color)
 		("FIXME" . ,highlight-color)
-		("TMP"   . ,highlight-color)))
+		("TMP"   . ,highlight-color)
+	))
 	(global-hl-todo-mode))
 
 ;; highlight text beyond my-max-column
@@ -266,3 +342,11 @@
 (when (require 'stickyfunc-enhance nil t)
 	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 	(semantic-mode 1))
+
+;; run clang-format on save
+(when (require 'clang-format nil t)
+	(add-hook 'c-mode-common-hook (lambda ()
+		(add-hook 'before-save-hook (lambda ()
+			(when (locate-dominating-file default-directory ".clang-format")
+				(clang-format-buffer)))
+			nil t))))
