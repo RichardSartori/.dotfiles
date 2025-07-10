@@ -7,4 +7,5 @@ export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
 export CARGO_HOME=${LIBS_DIR}/rust/cargo
 export PYTHON_HOME=/home/rsartori/.local
 alias cdd="cd ~/Downloads"
+alias xclip="xclip -selection clipboard"
 export CLANG_GCC="--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13"

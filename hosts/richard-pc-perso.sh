@@ -9,3 +9,4 @@ export CMAKE_HOME=${LIBS_DIR}/cmake/install
 export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
 export CARGO_HOME=${LIBS_DIR}/rust/cargo
 alias mk="$LIBS_DIR/man_perso.sh"
+alias xclip="xclip -selection clipboard"
