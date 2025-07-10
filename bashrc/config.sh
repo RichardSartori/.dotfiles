@@ -124,6 +124,7 @@ export MANPAGER="$PAGER +Gg"
 export EMACS_SERVER="emacs_server"
 emacs --bg-daemon=$EMACS_SERVER 2>/dev/null
 export EDITOR="emacsclient -nw --socket-name=$EMACS_SERVER"
+# use `$EDITOR -n` to open file without leaving the terminal
 
 # ssh aliases
 ####alias plafrim="ssh_key_setup && ssh plafrim"
@@ -195,16 +196,10 @@ alias ll="ls -ahl"
 alias l.="ls -d .*"
 
 # I'm a bad typer
-alias dc="cd"
-alias vf="cd"
-alias xs="cd"
-alias sl="ls"
-alias ks="ls"
-alias ms="ls"
-alias maje="make"
-alias mkae="make"
-alias amke="make"
-alias maek="make"
+alias {dc,vf,xs}="cd"
+alias {sl,ks,ms}="ls"
+alias {df,gh}="fg" ; alias dfdf="\df"
+alias {maje,mkae,amke,maek}="make"
 alias lire="more"
 
 # tar functions
