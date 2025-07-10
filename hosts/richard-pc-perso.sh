@@ -1,10 +1,10 @@
-PERSODIR=~/Documents/MyProjects
+PERSODIR=~/Documents/MyProjects/C/RAYLIB/V2
 WORKDIR=${PERSODIR}
 alias cdd="cd ~/Downloads"
 export LIBS_DIR=/home/richard/Documents/Libraries
 export HWLOC_HOME=${LIBS_DIR}/hwloc/install
 export LLVM_HOME=${LIBS_DIR}/llvm/install
-export MPI_HOME=${LIBS_DIR}/openmpi/install
+export MPI_HOME=${LIBS_DIR}/mpi/install
 export CMAKE_HOME=${LIBS_DIR}/cmake/install
 export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
 export CARGO_HOME=${LIBS_DIR}/rust/cargo

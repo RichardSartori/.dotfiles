@@ -28,10 +28,12 @@
 ;; my preferences
 (defconst my-max-column 80)
 (defconst my-tab-width 4)
+(defconst highlight-color "#00FF00")
 (setq-default fill-column my-max-column)
 (setq-default tab-width my-tab-width)
 (setq-default tab-stop-list nil)
 (global-set-key (kbd "TAB") 'tab-to-tab-stop)
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; preferences set in every buffer
 (add-hook 'after-change-major-mode-hook (lambda ()
@@ -61,7 +63,7 @@
 	(file-name-directory (file-truename load-file-name)))
 
 ;; syntax highlighting for LLVM
-;; https://github.com/llvm-mirror/llvm/blob/master/utils/emacs/llvm-mode.el
+;; https://github.com/llvm/llvm-project/blob/main/llvm/utils/emacs/llvm-mode.el
 (require 'llvm-mode)
 
 ;; sublime-text looking theme
@@ -72,35 +74,11 @@
 (setq backup-directory-alist '(("." . "~/.trash")))
 (setq backup-by-copying t)
 
-;; C-x f auto-complete
+;; 'ido-find-file auto-complete
 (ido-mode 1)
 
-;; key bindings
-(global-set-key (kbd "C-v") 'yank); paste
-(global-set-key (kbd "C-f") 'isearch-forward); find
-(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
-(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
-(global-set-key (kbd "M-q") 'fill-paragraph); add newlines before my-max-column
-(global-set-key (kbd "C-s") 'save-buffer); save
-(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
-
-; TODO: other bindings
-; TODO: try to keep usual OS bindings
-; TODO: find alternatives for prefix commands
-; TODO: run (loop (key func) (define-key local-map key func)) in hooks
-; NOTE: use C-h b to show emacs bindings
-; NOTE: use C-h k <keys> to see what function <keys> run
-;(global-set-key (kbd "C-c") 'kill-ring-save); copy FIXME: C-c is prefix
-;(global-set-key (kbd "C-x") 'kill-region); cut FIXME: C-x is prefix
-;(global-set-key (kbd "<C-TAB>") '<C-x o>) FIXME: how to map <C-TAB> to <C-x o>
-;(global-set-key (kbd "C-z") 'undo) FIXME: C-z bring back to the terminal
-;(global-set-key (kbd "C-y") 'redo) FIXME: 'redo is not a function
-;(global-set-key (kbd "C-w") 'save-buffers-kill-terminal); quit FIXME: is cut
-;(global-set-key (kbd "C-0") 'delete-window) FIXME: does not work
-;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: does not work
-;(global-set-key (kbd "C-2") 'split-window-below) FIXME: does not work
-;(global-set-key (kbd "C-3") 'split-window-right) FIXME: does not work
-
+;; update installed packages
+; fallback method: `M-x list-packages RET` `S-u` `y` `x` `q`
 (defun update-packages ()
 	"Update and upgrade all installed Emacs packages"
 	(interactive)
@@ -114,7 +92,89 @@
 				(package-desc-version (cadr (assoc name package-archive-contents))))))
 			(when (and available (version-list-< installed available)
 				(package-reinstall name))))))
-;; fallback method: `M-x list-packages RET` `S-u` `y` `x` `q`
+
+;; helper functions to sync kill-ring with clipboard
+(defun copy-to-clipboard (begin end)
+	(interactive "r")
+	(if (region-active-p)
+		(progn
+			(call-process-region begin end
+				"xclip" nil nil nil "-selection" "clipboard" "-i")
+			(message "Copied to clipboard")
+			(deactivate-mark))
+	(message "No region selected")))
+(defun cut-to-clipboard (begin end)
+	(interactive "r")
+	(copy-to-clipboard begin end)
+	(kill-region begin end))
+(defun paste-from-clipboard ()
+	(interactive)
+	(insert (shell-command-to-string "xclip -selection clipboard -o")))
+
+;; ============= ;;
+;; key bindings  ;;
+;; ============= ;;
+
+;; NOTES:
+; use C-h b to show emacs bindings
+; use C-h k <keys> to see which function is bind to <keys>
+
+;; rebind prefix keys C-c and C-x
+;; https://github.com/darkstego/rebinder.el/blob/master/rebinder.el
+(require 'rebinder)
+(define-key global-map (kbd "C-c") (rebinder-dynamic-binding "C-c"))
+(define-key rebinder-mode-map (kbd "C-c") 'copy-to-clipboard)
+; FIXME: remap "C-x o" to something else before uncommenting the following
+;(define-key global-map (kbd "C-x") (rebinder-dynamic-binding "C-x"))
+;(define-key rebinder-mode-map (kbd "C-x") 'cut-to-clipboard)
+(rebinder-hook-to-mode 't 'after-change-major-mode-hook)
+
+;; usual OS bindings, mapped with C-
+(global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
+(global-set-key (kbd "C-f") 'isearch-forward); find
+(define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
+(define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
+(global-set-key (kbd "C-o") 'ido-find-file); open file
+(global-set-key (kbd "C-q") 'save-buffers-kill-terminal); quit
+(global-set-key (kbd "C-s") 'save-buffer); save
+(global-set-key (kbd "C-v") 'paste-from-clipboard); paste
+; FIXME: use C-<tab> instead of S-<tab>
+(global-set-key (kbd "<backtab>") 'other-window); go to next buffer in cycle
+
+;; unusual bindings, mapped with M-
+(global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
+(global-set-key (kbd "M-f") 'fill-paragraph); add newlines before my-max-column
+(global-set-key (kbd "M-m") 'recenter-top-bottom); put cursor at the middle
+(global-set-key (kbd "M-q") 'keyboard-escape-quit); cancel operation
+(global-set-key (kbd "M-s") 'suspend-emacs); bring back to the terminal
+(global-set-key (kbd "M-v") 'view-mode); set buffer read-only
+
+;; toggle hide/show code block
+(require 'hideshow)
+(defun hidden-block-appearance (ov)
+	"Custom appearance of hidden blocks"
+	(when (eq 'code (overlay-get ov 'hs))
+		(overlay-put ov 'display
+			(propertize " ••• " 'face `(
+				:foreground ,highlight-color
+				:weight bold)))))
+(add-hook 'prog-mode-hook (lambda ()
+	(hs-minor-mode)
+	(setq hs-set-up-overlay 'hidden-block-appearance)
+	(local-unset-key (kbd "M-h"))
+	(local-set-key (kbd "M-h") 'hs-toggle-hiding)))
+
+;; TODO: map these bindings:
+;(global-set-key (kbd "C-0") 'delete-window) FIXME: is 0
+;(global-set-key (kbd "C-1") 'delete-other-windows) FIXME: is 1
+;(global-set-key (kbd "C-2") 'split-window-below) FIXME: is 2
+;(global-set-key (kbd "C-3") 'split-window-right) FIXME: is 3
+
+;; TODO: find better bindings for:
+;(global-set-key (kbd "C-M-<down>") #'down-list); move down a code block
+;(global-set-key (kbd "C-M-<up>") #'backward-up-list); move up a code block
+;(global-set-key (kbd "C-M-<right>") #'down-list); move down a code block
+;(global-set-key (kbd "C-M-<left>") #'backward-up-list); move up a code block
 
 ;; ============================================ ;;
 ;; commands below require non built-in packages ;;
@@ -127,24 +187,66 @@
 ;; syntax highlighting for Rust
 (require 'rust-mode nil t)
 
+;; undo-redo
+(when (require 'undo-fu nil t)
+	(global-set-key (kbd "C-z") 'undo-fu-only-undo)
+	(global-set-key (kbd "C-y") 'undo-fu-only-redo))
+
+;; language server protocol (LSP)
+; TODO: add lsp-ui?
+(defconst lsp-modes
+	(list 'c-mode-hook 'c++-mode-hook 'rust-mode-hook 'python-mode-hook))
+(when (and (require 'lsp-mode nil t) (require 'company nil t))
+	(setq
+		lsp-enable-snippet nil
+		lsp-prefer-capf t ; completions at point
+		lsp-diagnostics-provider :none ; disable on-the-fly error checks
+		lsp-auto-guess-root t
+		lsp-restart 'ignore ; don't prompt
+		lsp-enable-file-watchers nil ; performance
+		lsp-format-on-save nil
+		lsp-before-save-edits nil
+		lsp-enable-indentation nil
+		lsp-enable-formatting nil
+		lsp-apply-edits nil ; don't even think about touching my code
+		lsp-completion-item-limit 5
+		lsp-enable-on-type-formatting nil
+		lsp-enable-text-document-sync t
+		lsp-signature-auto-activate t
+		lsp-completion-enable-additional-text-edit nil
+		company-auto-expand nil
+		company-auto-complete nil
+		company-auto-complete-chars nil
+		company-auto-commit nil
+		company-auto-commit-chars nil
+		company-backends '((company-lsp)))
+	(global-company-mode)
+	(dolist (hook lsp-modes)
+		(add-hook hook #'lsp))
+	(define-key company-active-map (kbd "TAB") #'company-complete-selection)
+	(define-key company-active-map (kbd "RET") nil))
+
 ;; general auto-completion
 (when (require 'auto-complete nil t)
 	(ac-config-default)
-	(add-to-list 'ac-modes 'rust-mode))
+	(dolist (hook lsp-modes)
+		(add-hook hook (lambda ()
+			(auto-complete-mode -1)))))
 
 ;; multiple cursors
 (when (require 'multiple-cursors nil t)
 	(global-set-key (kbd "<M-down>") 'mc/mark-next-like-this)
 	(global-set-key (kbd "<M-up>") 'mc/mark-previous-like-this)
 	(global-set-key (kbd "<M-right>") 'mc/mark-next-like-this)
-	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this))
+	(global-set-key (kbd "<M-left>") 'mc/mark-previous-like-this)
+	(define-key mc/keymap (kbd "M-q") 'mc/keyboard-quit))
 
 ;; highlight keywords
 (when (require 'hl-todo nil t)
-	(setq hl-todo-keyword-faces '(
-		("TODO"  . "#00FF00")
-		("FIXME" . "#00FF00")
-		("TMP"   . "#00FF00")))
+	(setq hl-todo-keyword-faces `(
+		("TODO"  . ,highlight-color)
+		("FIXME" . ,highlight-color)
+		("TMP"   . ,highlight-color)))
 	(global-hl-todo-mode))
 
 ;; highlight text beyond my-max-column
@@ -164,7 +266,3 @@
 (when (require 'stickyfunc-enhance nil t)
 	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 	(semantic-mode 1))
-
-; TODO: add lsp-mode and rust support
-; https://robert.kra.hn/posts/rust-emacs-setup/
-; add documentation for gnu-elpa-keyring-update and lsp-mode
