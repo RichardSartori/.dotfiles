@@ -28,11 +28,12 @@ run_command() {
 run_command "sudo -- sh -c 'apt update && apt -y full-upgrade && apt -y autoremove'"
 
 # 2. Update Python packages
-run_command "python3 -m pip install --upgrade pip"
+PIP_OPTIONS=""
+run_command "python3 -m pip install --upgrade $PIP_OPTIONS pip"
 REQUIREMENTS="$LOCAL_DIR/requirements.txt"
 run_command "pip list --outdated --format=columns | awk 'NR>2 {print $1}' > $REQUIREMENTS"
 if [ ! -e "$REQUIREMENTS" ]; then
-	run_command "cat $REQUIREMENTS | xargs -n1 pip install --upgrade"
+	run_command "cat $REQUIREMENTS | xargs -n1 pip install --upgrade $PIP_OPTIONS"
 fi
 delete "$REQUIREMENTS"
 
@@ -51,19 +52,21 @@ run_command "rustup update"
 ####```
 
 # 6. Update Discord
-DISCORD_URL="https://discord.com/api/download/stable?platform=linux&format=deb"
-DISCORD_DEB="$LOCAL_DIR/discord.deb"
-INSTALLED_VERSION=$(dpkg-query -W -f='${Version}\n' discord)
-LATEST_VERSION=$(curl -sI "$DISCORD_URL" | grep -oP "discord-([0-9\.]+)\.deb" | grep -oP "[0-9\.]+[0-9]")
-if [ -z "$LATEST_VERSION" ]; then
-	run_command "Could not determine the latest Discord version | false"
-fi
-if [ "$INSTALLED_VERSION" == "$LATEST_VERSION" ]; then
-	echo "Discord is already up to date" | tee -a "$LOG_FILE"
-else
-	run_command "wget --no-verbose -O $DISCORD_DEB $DISCORD_URL"
-	run_command "sudo apt install -y $DISCORD_DEB"
-	delete "$DISCORD_DEB"
+if [ ! -z `which discord` ]; then
+	DISCORD_URL="https://discord.com/api/download/stable?platform=linux&format=deb"
+	DISCORD_DEB="$LOCAL_DIR/discord.deb"
+	INSTALLED_VERSION=$(dpkg-query -W -f='${Version}\n' discord)
+	LATEST_VERSION=$(curl -sI "$DISCORD_URL" | grep -oP "discord-([0-9\.]+)\.deb" | grep -oP "[0-9\.]+[0-9]")
+	if [ -z "$LATEST_VERSION" ]; then
+		run_command "Could not determine the latest Discord version | false"
+	fi
+	if [ "$INSTALLED_VERSION" == "$LATEST_VERSION" ]; then
+		echo "Discord is already up to date" | tee -a "$LOG_FILE"
+	else
+		run_command "wget --no-verbose -O $DISCORD_DEB $DISCORD_URL"
+		run_command "sudo apt install -y $DISCORD_DEB"
+		delete "$DISCORD_DEB"
+	fi
 fi
 
 #TODO: add weekly reminder and mute KDE Discover notifications
