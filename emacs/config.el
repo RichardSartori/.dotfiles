@@ -1,5 +1,3 @@
-(package-initialize)
-
 ;; MELPA
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
@@ -285,14 +283,16 @@
 		company-auto-complete-chars nil
 		company-auto-commit nil
 		company-auto-commit-chars nil
-		company-backends '((company-lsp)))
+	)
 	(global-company-mode)
 	(dolist (hook lsp-modes)
 		(add-hook hook #'lsp))
 	(define-key company-active-map (kbd "TAB") #'company-complete-selection)
 	(define-key company-active-map (kbd "RET") nil)
 	(define-key company-active-map (kbd "C-s") 'save-buffer)
-	(global-set-key (kbd "M-d") 'lsp-find-definition))
+	(global-set-key (kbd "M-d") 'lsp-find-definition)
+	(global-set-key (kbd "M-e") 'xref-go-back) ; undo lsp-find-definition
+)
 
 ;; general auto-completion
 (when (require 'auto-complete nil t)
