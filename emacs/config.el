@@ -285,6 +285,7 @@
 		company-auto-complete-chars nil
 		company-auto-commit nil
 		company-auto-commit-chars nil
+		company-backends '((company-lsp))
 	)
 	(global-company-mode)
 	(dolist (hook lsp-modes)
