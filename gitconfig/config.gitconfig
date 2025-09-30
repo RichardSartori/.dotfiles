@@ -7,6 +7,8 @@
 	hsup = pull
 	hist = log --follow -p --
 	fix = pull --no-ff
+[credential]
+	helper = cache --timeout=3600
 [advice]
 	statusHints = off
 [color]

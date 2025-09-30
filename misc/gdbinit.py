@@ -653,7 +653,7 @@ class Dashboard(gdb.Command):
         # scan the scope for modules
         modules = []
         for name in globals():
-            if name in ["Assembly", "Threads", "Registers", "History"]:
+            if name in ["Assembly", "Threads", "History"]: # "Registers"
                 continue
             obj = globals()[name]
             try:
