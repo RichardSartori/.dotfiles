@@ -280,7 +280,8 @@ alias flang="flang ${fstandard} -Werror"
 
 # other aliases
 alias net="rm *~ .*~ \#* .\#*"
-alias m="$EDITOR"
+alias {mm,ed}="$EDITOR"
+alias {m,mn}="ed -n"
 alias c="cd -"
 alias ram="ps a -o cmd=COMMAND,pid=ID,stat=STATE,rss=USED,vsz=ALLOCATED --sort=-vsz | grep '\(^/\)\|\(ps a -o\)\|\(grep\)' -v"
 alias hellothere="echo 'General Kenobi!'"
