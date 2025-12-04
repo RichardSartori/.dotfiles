@@ -7,10 +7,13 @@
 	hsup = pull
 	hist = log --follow -p --
 	fix = pull --no-ff
+	spull = pull --recurse-submodules
+	supdate = submodule update --init --recursive
 [credential]
 	helper = cache --timeout=3600
 [advice]
 	statusHints = off
+	detachedHead = false
 [color]
 	ui = auto
 [color "diff"]
@@ -22,3 +25,5 @@
 	added = green
 	changed = yellow
 	untracked = red
+[diff]
+	algorithm = histogram
