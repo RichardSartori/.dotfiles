@@ -2,6 +2,8 @@
 	path = ~/.dotfiles/gitconfig/host
 [pull]
 	ff = only
+[push]
+	autoSetupRemote = true
 [alias]
 	what = log --oneline -n 10
 	hsup = pull

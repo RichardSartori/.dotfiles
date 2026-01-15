@@ -111,9 +111,11 @@
 	(interactive "r")
 	(copy-to-clipboard begin end)
 	(kill-region begin end))
+(defun get-clipboard ()
+	(shell-command-to-string "xclip -selection clipboard -o"))
 (defun paste-from-clipboard ()
 	(interactive)
-	(insert (shell-command-to-string "xclip -selection clipboard -o")))
+	(insert (get-clipboard)))
 
 ;; ibuffer configuration
 (require 'ibuffer)
@@ -201,11 +203,12 @@
 (define-key isearch-mode-map (kbd "<f3>") 'isearch-repeat-forward)
 (define-key isearch-mode-map (kbd "S-<f3>") 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "C-v") (lambda () (interactive)
-	(isearch-yank-string (shell-command-to-string "xclip -selection clipboard -o"))))
+	(isearch-yank-string (get-clipboard))))
 
 ;; unusual bindings, mapped with M-
 (global-set-key (kbd "M-c") 'comment-dwim); toggle comment/uncomment region
 ; "M-d" is "lsp-find-definition"
+; "M-e" is "xref-go-back"
 (global-set-key (kbd "M-f") 'fill-paragraph); add newlines before my-max-column
 ; "M-h" is "hs-toggle-hiding"
 (global-set-key (kbd "M-i") 'delete-other-windows); IJKL window management
