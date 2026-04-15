@@ -180,6 +180,9 @@
 (define-key rebinder-mode-map (kbd "C-x") 'cut-to-clipboard)
 (rebinder-hook-to-mode 't 'after-change-major-mode-hook)
 
+;; globally make C-q an alias of C-g
+(define-key key-translation-map (kbd "C-q") (kbd "C-g"))
+
 ;; usual OS bindings, mapped with C-
 (global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
 (global-set-key (kbd "C-b") 'ibuffer); open menu
@@ -188,8 +191,8 @@
 ; "C-g" is "keyboard-quit"
 ; "C-i" is "<TAB>"
 ; "C-m" is "<RET>"
-(global-set-key (kbd "C-o") 'ido-find-file); open file
-(global-set-key (kbd "C-q") 'keyboard-escape-quit); cancel operation
+(global-set-key (kbd "C-o") 'ido-find-file); open file (/sudo::file if needed)
+; "C-q" is "C-g"
 (global-set-key (kbd "C-s") 'save-buffer); save
 (global-set-key (kbd "C-v") 'paste-from-clipboard); paste
 (global-set-key (kbd "C-w") 'delete-window); delete buffer at point
@@ -290,9 +293,9 @@
 		company-auto-commit-chars nil
 		company-backends '((company-lsp))
 	)
-	(global-company-mode)
 	(dolist (hook lsp-modes)
-		(add-hook hook #'lsp))
+		(add-hook hook #'lsp)
+		(add-hook hook #'company-mode))
 	(define-key company-active-map (kbd "TAB") #'company-complete-selection)
 	(define-key company-active-map (kbd "RET") nil)
 	(define-key company-active-map (kbd "C-s") 'save-buffer)
@@ -303,6 +306,7 @@
 ;; general auto-completion
 (when (require 'auto-complete nil t)
 	(ac-config-default)
+	(global-auto-complete-mode)
 	(dolist (hook lsp-modes)
 		(add-hook hook (lambda ()
 			(auto-complete-mode -1)))))
