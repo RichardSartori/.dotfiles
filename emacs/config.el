@@ -182,6 +182,12 @@
 ;; globally make C-q an alias of C-g
 (define-key key-translation-map (kbd "C-q") (kbd "C-g"))
 
+;; ensure M-q is "quit" everywhere
+(define-key
+	(or overriding-terminal-local-map
+	(setq overriding-terminal-local-map (make-sparse-keymap)))
+	(kbd "M-q") #'save-buffers-kill-terminal)
+
 ;; usual OS bindings, mapped with C-
 (global-set-key (kbd "C-a") 'mark-whole-buffer); select-all
 (global-set-key (kbd "C-b") 'ibuffer); open menu
@@ -218,7 +224,7 @@
 (global-set-key (kbd "M-k") 'split-window-below); IJKL window management
 (global-set-key (kbd "M-l") 'split-window-right); IJKL window management
 (global-set-key (kbd "M-m") 'recenter-top-bottom); put cursor at the middle
-(global-set-key (kbd "M-q") 'save-buffers-kill-terminal); quit
+; "M-q" is "save-buffer-kill-terminal"
 (global-set-key (kbd "M-s") 'suspend-frame); bring back to the terminal
 (global-set-key (kbd "M-v") 'view-mode); set buffer read-only
 ; "M-x" is "smex"
