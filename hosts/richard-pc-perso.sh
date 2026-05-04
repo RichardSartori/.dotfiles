@@ -1,12 +1,19 @@
-PERSODIR=~/Documents/MyProjects/C/RAYLIB/V2
+PERSODIR=~/Documents/DEV
 WORKDIR=${PERSODIR}
 alias cdd="cd ~/Downloads"
-export LIBS_DIR=/home/richard/Documents/Libraries
-export HWLOC_HOME=${LIBS_DIR}/hwloc/install
-export LLVM_HOME=${LIBS_DIR}/llvm/install
-export MPI_HOME=${LIBS_DIR}/mpi/install
-export CMAKE_HOME=${LIBS_DIR}/cmake/install
+export LIBS_DIR=~/Documents/DEV/Libraries
 export RUSTUP_HOME=${LIBS_DIR}/rust/rustup
 export CARGO_HOME=${LIBS_DIR}/rust/cargo
-alias mk="$LIBS_DIR/man_perso.sh"
-alias xclip="xclip -selection clipboard"
+export BAZZITE_HOME=~/.local
+
+case $HOSTNAME in
+
+	bazzite)
+		alias deb="distrobox enter debian"
+		;;
+
+	debian)
+		alias deb="logout"
+		;;
+
+esac
