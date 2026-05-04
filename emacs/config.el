@@ -101,8 +101,7 @@
 	(interactive "r")
 	(if (region-active-p)
 		(progn
-			(call-process-region begin end
-				"xclip" nil nil nil "-selection" "clipboard" "-i")
+			(call-process-region begin end "wl-copy" nil nil nil)
 			(message "Copied to clipboard")
 			(deactivate-mark)
 		)
@@ -112,7 +111,7 @@
 	(copy-to-clipboard begin end)
 	(kill-region begin end))
 (defun get-clipboard ()
-	(shell-command-to-string "xclip -selection clipboard -o"))
+	(shell-command-to-string "wl-paste -n"))
 (defun paste-from-clipboard ()
 	(interactive)
 	(insert (get-clipboard)))
