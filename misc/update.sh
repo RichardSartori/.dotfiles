@@ -42,6 +42,7 @@ run_command "emacs --batch --eval '(progn (load-file \"~/.emacs\") (update-packa
 
 # 4. Update Rust installation
 run_command "rustup update"
+run_command "cargo install-update --all --locked"
 
 # 5. TODO: Update the rust analyzer alongside
 ####https://robert.kra.hn/posts/rust-emacs-setup/
