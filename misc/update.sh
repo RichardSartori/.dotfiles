@@ -32,7 +32,7 @@ PIP_OPTIONS=""
 run_command "python3 -m pip install --upgrade $PIP_OPTIONS pip"
 REQUIREMENTS="$LOCAL_DIR/requirements.txt"
 run_command "pip list --outdated --format=columns | awk 'NR>2 {print $1}' > $REQUIREMENTS"
-if [ ! -e "$REQUIREMENTS" ]; then
+if [ -e "$REQUIREMENTS" ]; then
 	run_command "cat $REQUIREMENTS | xargs -n1 pip install --upgrade $PIP_OPTIONS"
 fi
 delete "$REQUIREMENTS"
